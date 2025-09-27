@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { MarketChart } from "./MarketChart";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { Market, calculatePrices, formatTimeRemaining, formatVolume } from "@/types/contract";
 import { usePredictionModal } from "@/hooks/usePredictionModal";
@@ -106,6 +107,16 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
                 </div>
                 <div className="text-xs md:text-sm text-muted-foreground">Time Left</div>
               </div>
+            </div>
+
+            {/* Market Chart */}
+            <div className="mb-6 md:mb-8">
+              <MarketChart 
+                marketId={currentMarket.id}
+                currentYesPrice={yesPrice}
+                currentNoPrice={noPrice}
+                className="bg-black/20 backdrop-blur-sm"
+              />
             </div>
 
             {/* Action Buttons */}

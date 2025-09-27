@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { MarketBadge } from "./MarketBadge";
+import { MarketChart } from "./MarketChart";
 import { TrendingUp, TrendingDown, Users, Clock, Image as ImageIcon, BarChart3 } from "lucide-react";
 import { Market, calculatePrices, formatTimeRemaining, formatVolume } from "@/types/contract";
 import { usePredictionModal } from "@/hooks/usePredictionModal";
@@ -130,6 +131,14 @@ export function MarketCard({
           <span className="text-sm font-bold">{noPrice}¢</span>
         </Button>
       </div>
+
+      {/* Market Chart */}
+      <MarketChart 
+        marketId={market.id}
+        currentYesPrice={yesPrice}
+        currentNoPrice={noPrice}
+        className="mb-3"
+      />
 
       {/* Tags */}
       {market.tags.length > 0 && (
