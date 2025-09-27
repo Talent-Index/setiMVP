@@ -91,7 +91,7 @@ export function SharedPredictionModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 min-h-screen">
-      <div className="bg-background rounded-lg shadow-xl w-full max-w-md mx-auto my-auto max-h-[90vh] overflow-y-auto">
+      <div className="bg-background rounded-lg shadow-xl w-full max-w-2xl mx-auto my-auto max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gradient-gold font-orbitron">
@@ -131,7 +131,7 @@ export function SharedPredictionModal({
           )}
 
           {/* Market Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-muted/20 rounded-lg">
+          <div className="grid grid-cols-3 gap-6 mb-6 p-6 bg-muted/20 rounded-lg">
             <div className="text-center">
               <div className="text-lg font-bold text-gradient-gold">
                 {yesPrice}¢ / {noPrice}¢
@@ -155,7 +155,7 @@ export function SharedPredictionModal({
           </div>
 
           {/* Selected Outcome Display */}
-          <div className="mb-6 p-4 bg-muted/20 rounded-lg">
+          <div className="mb-6 p-6 bg-muted/20 rounded-lg">
             <div className="text-center">
               <div className="text-xl font-bold text-gradient-gold mb-1">
                 {outcome} - {outcomePrice}¢
@@ -195,7 +195,7 @@ export function SharedPredictionModal({
             {amount && parseFloat(amount) > 0 && (
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Potential Payout</Label>
-                <div className="p-3 bg-muted/30 rounded-lg">
+                <div className="p-4 bg-muted/30 rounded-lg">
                   <div className="text-lg font-bold text-foreground">
                     {potentialPayout} SUI
                   </div>
@@ -296,7 +296,7 @@ Thank you for using PredictMarket!
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 min-h-screen">
-      <div className="bg-background rounded-lg shadow-xl w-full max-w-md mx-auto my-auto">
+      <div className="bg-background rounded-lg shadow-xl w-full max-w-lg mx-auto my-auto">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gradient-gold font-orbitron">
@@ -325,7 +325,7 @@ Thank you for using PredictMarket!
               </p>
             </div>
 
-            <div className="bg-muted/20 rounded-lg p-4 space-y-3">
+            <div className="bg-muted/20 rounded-lg p-6 space-y-4">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Receipt ID:</span>
                 <span className="font-mono text-xs">{receipt.id}</span>
