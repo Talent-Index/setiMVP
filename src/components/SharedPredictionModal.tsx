@@ -2,19 +2,27 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X, DollarSign, AlertCircle } from "lucide-react";
+import { X, DollarSign, AlertCircle, CheckCircle, Download, Copy } from "lucide-react";
 import { Market, calculatePrices, formatTimeRemaining } from "@/types/contract";
 import { useCurrentWallet } from '@mysten/dapp-kit';
 import { usePrediction } from "@/hooks/usePrediction";
+import { PredictionReceipt } from "@/hooks/usePredictionModal";
 
 interface SharedPredictionModalProps {
   isOpen: boolean;
   onClose: () => void;
   market: Market | null;
   outcome: 'YES' | 'NO' | null;
+  onShowReceipt: (receipt: PredictionReceipt) => void;
 }
 
-export function SharedPredictionModal({ isOpen, onClose, market, outcome }: SharedPredictionModalProps) {
+export function SharedPredictionModal({ 
+  isOpen, 
+  onClose, 
+  market, 
+  outcome, 
+  onShowReceipt 
+}: SharedPredictionModalProps) {
   const { isConnected } = useCurrentWallet();
   const { placePrediction, isLoading, error } = usePrediction();
   const [amount, setAmount] = useState("");
@@ -47,8 +55,20 @@ export function SharedPredictionModal({ isOpen, onClose, market, outcome }: Shar
       });
 
       if (success) {
-        alert(`Successfully placed ${outcome} prediction for ${amount} SUI on "${market.question}"`);
-        handleClose();
+        // Generate receipt
+        const receipt: PredictionReceipt = {
+          id: `pred_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          marketId: market.id,
+          marketQuestion: market.question,
+          outcome: outcome,
+          amount: parseFloat(amount),
+          price: outcomePrice,
+          potentialPayout: parseFloat(potentialPayout),
+          timestamp: new Date(),
+          status: 'confirmed'
+        };
+
+        onShowReceipt(receipt);
       }
       
     } catch (err) {
@@ -68,8 +88,8 @@ export function SharedPredictionModal({ isOpen, onClose, market, outcome }: Shar
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 min-h-screen">
-      <div className="bg-background rounded-lg shadow-xl max-w-4xl w-full mx-auto my-auto max-h-[90vh] overflow-y-auto">
-        <div className="p-4 md:p-6">
+      <div className="bg-background rounded-lg shadow-xl max-w-2xl w-full mx-auto my-auto max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gradient-gold font-orbitron">
               Place Prediction
@@ -87,13 +107,13 @@ export function SharedPredictionModal({ isOpen, onClose, market, outcome }: Shar
               </span>
             </div>
 
-            <h3 className="text-xl md:text-2xl font-bold mb-4 leading-tight">
+            <h3 className="text-lg font-bold mb-2 leading-tight">
               <span className="text-gradient-gold font-orbitron">
                 {market.question}
               </span>
             </h3>
 
-            <p className="text-sm md:text-base text-muted-foreground mb-6 leading-relaxed">
+            <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
               {market.description}
             </p>
           </div>
@@ -108,33 +128,33 @@ export function SharedPredictionModal({ isOpen, onClose, market, outcome }: Shar
           )}
 
           {/* Market Stats */}
-          <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-6 md:mb-8">
-            <div className="flex items-center gap-2">
-              <div className="text-lg md:text-xl lg:text-2xl font-bold text-gradient-gold">
+          <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-muted/20 rounded-lg">
+            <div className="text-center">
+              <div className="text-lg font-bold text-gradient-gold">
                 {yesPrice}¢ / {noPrice}¢
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground">YES / NO</div>
+              <div className="text-xs text-muted-foreground">YES / NO</div>
             </div>
             
-            <div className="flex items-center gap-2">
-              <div className="text-lg md:text-xl lg:text-2xl font-bold text-gradient-neon">
+            <div className="text-center">
+              <div className="text-lg font-bold text-gradient-neon">
                 ${(market.volume_24h / 1_000_000_000).toFixed(2)}
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground">24h Volume</div>
+              <div className="text-xs text-muted-foreground">24h Volume</div>
             </div>
             
-            <div className="flex items-center gap-2">
-              <div className="text-lg md:text-xl lg:text-2xl font-bold text-accent">
+            <div className="text-center">
+              <div className="text-lg font-bold text-accent">
                 {formatTimeRemaining(market.end_time)}
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground">Time Left</div>
+              <div className="text-xs text-muted-foreground">Time Left</div>
             </div>
           </div>
 
           {/* Selected Outcome Display */}
           <div className="mb-6 p-4 bg-muted/20 rounded-lg">
             <div className="text-center">
-              <div className="text-2xl font-bold text-gradient-gold mb-2">
+              <div className="text-xl font-bold text-gradient-gold mb-1">
                 {outcome} - {outcomePrice}¢
               </div>
               <div className="text-sm text-muted-foreground">
@@ -212,6 +232,162 @@ export function SharedPredictionModal({ isOpen, onClose, market, outcome }: Shar
             <p className="text-xs text-muted-foreground text-center">
               Predictions are final once placed. Please review all details before confirming.
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Receipt Component
+interface PredictionReceiptModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  receipt: PredictionReceipt | null;
+}
+
+export function PredictionReceiptModal({ isOpen, onClose, receipt }: PredictionReceiptModalProps) {
+  if (!isOpen || !receipt) {
+    return null;
+  }
+
+  const handleDownloadReceipt = () => {
+    const receiptText = `
+PREDICTION RECEIPT
+==================
+
+Receipt ID: ${receipt.id}
+Date: ${receipt.timestamp.toLocaleString()}
+Status: ${receipt.status.toUpperCase()}
+
+MARKET DETAILS
+--------------
+Question: ${receipt.marketQuestion}
+Market ID: ${receipt.marketId}
+
+PREDICTION DETAILS
+------------------
+Outcome: ${receipt.outcome}
+Amount: ${receipt.amount} SUI
+Price: ${receipt.price}¢
+Potential Payout: ${receipt.potentialPayout} SUI
+
+Thank you for using PredictMarket!
+    `.trim();
+
+    const blob = new Blob([receiptText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `prediction-receipt-${receipt.id}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopyReceipt = () => {
+    const receiptText = `Receipt ID: ${receipt.id}\nMarket: ${receipt.marketQuestion}\nOutcome: ${receipt.outcome}\nAmount: ${receipt.amount} SUI\nPrice: ${receipt.price}¢\nPotential Payout: ${receipt.potentialPayout} SUI`;
+    navigator.clipboard.writeText(receiptText);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 min-h-screen">
+      <div className="bg-background rounded-lg shadow-xl max-w-md w-full mx-auto my-auto">
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gradient-gold font-orbitron">
+              Prediction Receipt
+            </h2>
+            <Button variant="ghost" size="sm" onClick={onClose}>
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+
+          {/* Success Icon */}
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-success" />
+            </div>
+          </div>
+
+          {/* Receipt Content */}
+          <div className="space-y-4 mb-6">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-foreground mb-2">
+                Prediction Placed Successfully!
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Your {receipt.outcome} prediction has been confirmed
+              </p>
+            </div>
+
+            <div className="bg-muted/20 rounded-lg p-4 space-y-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Receipt ID:</span>
+                <span className="font-mono text-xs">{receipt.id}</span>
+              </div>
+              
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Market:</span>
+                <span className="text-right text-xs max-w-[200px]">{receipt.marketQuestion}</span>
+              </div>
+              
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Outcome:</span>
+                <span className={`font-bold ${receipt.outcome === 'YES' ? 'text-success' : 'text-danger'}`}>
+                  {receipt.outcome}
+                </span>
+              </div>
+              
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Amount:</span>
+                <span className="font-bold">{receipt.amount} SUI</span>
+              </div>
+              
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Price:</span>
+                <span className="font-bold">{receipt.price}¢</span>
+              </div>
+              
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Potential Payout:</span>
+                <span className="font-bold text-gradient-gold">{receipt.potentialPayout} SUI</span>
+              </div>
+              
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Date:</span>
+                <span className="text-xs">{receipt.timestamp.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              onClick={handleCopyReceipt}
+              className="flex-1 transition-all duration-200 hover:scale-105"
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              Copy
+            </Button>
+            <Button 
+              onClick={handleDownloadReceipt}
+              className="flex-1 transition-all duration-200 hover:scale-105"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download
+            </Button>
+          </div>
+
+          <div className="mt-4 text-center">
+            <Button 
+              onClick={onClose}
+              className="w-full transition-all duration-200 hover:scale-105"
+            >
+              Close
+            </Button>
           </div>
         </div>
       </div>

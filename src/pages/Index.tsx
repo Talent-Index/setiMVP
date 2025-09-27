@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { MarketCard } from "@/components/MarketCard";
 import { MarketSlideshow } from "@/components/MarketSlideshow";
-import { SharedPredictionModal } from "@/components/SharedPredictionModal";
+import { SharedPredictionModal, PredictionReceiptModal } from "@/components/SharedPredictionModal";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Flame, Filter, ArrowRight, Plus } from "lucide-react";
@@ -10,7 +10,16 @@ import { usePredictionModal } from "@/hooks/usePredictionModal";
 
 const Index = () => {
   const { markets, isLoading, error, refetch } = useMarkets();
-  const { isOpen, selectedMarket, selectedOutcome, closeModal } = usePredictionModal();
+  const { 
+    isOpen, 
+    selectedMarket, 
+    selectedOutcome, 
+    receipt, 
+    showReceipt, 
+    closeModal, 
+    showPredictionReceipt, 
+    closeReceipt 
+  } = usePredictionModal();
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center">
@@ -156,6 +165,14 @@ const Index = () => {
         onClose={closeModal}
         market={selectedMarket}
         outcome={selectedOutcome}
+        onShowReceipt={showPredictionReceipt}
+      />
+
+      {/* Prediction Receipt Modal */}
+      <PredictionReceiptModal
+        isOpen={showReceipt}
+        onClose={closeReceipt}
+        receipt={receipt}
       />
     </div>
   );

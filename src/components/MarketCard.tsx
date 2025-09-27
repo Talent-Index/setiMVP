@@ -25,14 +25,14 @@ export function MarketCard({
   };
   
   return (
-    <div className="market-card group p-4 md:p-5 w-full max-w-sm mx-auto h-fit flex flex-col">
+    <div className="market-card group p-4 md:p-5 w-full max-w-sm mx-auto h-fit flex flex-col bg-background/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-border">
       {/* Market Image */}
       {market.image_url && (
-        <div className="w-full h-24 md:h-32 mb-3 md:mb-4 rounded-lg overflow-hidden bg-muted/30 flex-shrink-0">
+        <div className="w-full h-28 md:h-32 mb-3 md:mb-4 rounded-lg overflow-hidden bg-muted/30 flex-shrink-0 relative">
           <img 
             src={market.image_url} 
             alt={market.question}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               e.currentTarget.nextElementSibling?.classList.remove('hidden');
@@ -45,31 +45,33 @@ export function MarketCard({
       )}
       
       {/* Header with Badge and Trending */}
-      <div className="flex items-start justify-between mb-3 md:mb-4 flex-shrink-0">
+      <div className="flex items-start justify-between mb-3 flex-shrink-0">
         <MarketBadge variant="purple" className="text-xs">
           {market.category}
         </MarketBadge>
         {trending && (
-          <div className={`flex items-center gap-1 ${trending === 'up' ? 'text-success' : 'text-danger'}`}>
-            {trending === 'up' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-            <span className="text-xs font-medium">Trending</span>
+          <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+            trending === 'up' ? 'bg-success/20 text-success' : 'bg-danger/20 text-danger'
+          }`}>
+            {trending === 'up' ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+            <span>Trending</span>
           </div>
         )}
       </div>
 
       {/* Title */}
-      <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-gradient-gold transition-all duration-300 line-clamp-2 flex-shrink-0">
+      <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-gradient-gold transition-all duration-300 line-clamp-2 flex-shrink-0 leading-tight">
         {market.question}
       </h3>
       
       {/* Description */}
-      <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-shrink-0">
+      <p className="text-sm text-muted-foreground mb-3 line-clamp-2 flex-shrink-0 leading-relaxed">
         {market.description}
       </p>
 
       {/* Market Status */}
       {market.resolved && (
-        <div className="mb-4 p-2 rounded-lg bg-muted/30 flex-shrink-0">
+        <div className="mb-3 p-3 rounded-lg bg-muted/30 flex-shrink-0 border border-border/30">
           <div className="text-xs text-muted-foreground mb-1">Market Status</div>
           <div className={`text-sm font-medium ${
             market.winning_outcome === 0 ? 'text-danger' : 
@@ -84,8 +86,8 @@ export function MarketCard({
       )}
 
       {/* Market Stats */}
-      <div className="mb-3 p-2 bg-muted/20 rounded-lg flex-shrink-0">
-        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+      <div className="mb-3 p-3 bg-muted/20 rounded-lg flex-shrink-0 border border-border/20">
+        <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
           <div className="flex items-center gap-1">
             <Users className="w-3 h-3" />
             <span>{(market.total_liquidity / 1_000_000_000).toFixed(2)} SUI</span>
@@ -96,7 +98,7 @@ export function MarketCard({
           </div>
         </div>
         
-        {/* Price Movement */}
+        {/* Volume */}
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">24h Volume</span>
           <div className="flex items-center gap-1">
@@ -109,22 +111,22 @@ export function MarketCard({
       {/* Price Buttons */}
       <div className="grid grid-cols-2 gap-2 mb-3 flex-shrink-0">
         <Button 
-          className="btn-market-success h-12 flex flex-col items-center justify-center transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="btn-market-success h-12 flex flex-col items-center justify-center transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 border-0 shadow-sm"
           variant="outline"
           disabled={market.resolved}
           onClick={() => handlePredictionClick('YES')}
         >
-          <span className="text-xs opacity-80">YES</span>
+          <span className="text-xs opacity-80 font-medium">YES</span>
           <span className="text-sm font-bold">{yesPrice}¢</span>
         </Button>
         
         <Button 
-          className="btn-market-danger h-12 flex flex-col items-center justify-center transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="btn-market-danger h-12 flex flex-col items-center justify-center transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 border-0 shadow-sm"
           variant="outline"
           disabled={market.resolved}
           onClick={() => handlePredictionClick('NO')}
         >
-          <span className="text-xs opacity-80">NO</span>
+          <span className="text-xs opacity-80 font-medium">NO</span>
           <span className="text-sm font-bold">{noPrice}¢</span>
         </Button>
       </div>
@@ -135,13 +137,13 @@ export function MarketCard({
           {market.tags.slice(0, 3).map((tag, index) => (
             <span 
               key={index}
-              className="text-xs px-2 py-1 bg-muted/30 rounded-full text-muted-foreground"
+              className="text-xs px-2 py-1 bg-muted/30 rounded-full text-muted-foreground border border-border/20"
             >
               {tag}
             </span>
           ))}
           {market.tags.length > 3 && (
-            <span className="text-xs px-2 py-1 bg-muted/30 rounded-full text-muted-foreground">
+            <span className="text-xs px-2 py-1 bg-muted/30 rounded-full text-muted-foreground border border-border/20">
               +{market.tags.length - 3}
             </span>
           )}
