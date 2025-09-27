@@ -97,7 +97,7 @@ export function MarketChart({ marketId, currentYesPrice, currentNoPrice, classNa
   const noChange = latestData ? latestData.noPrice - (previousData?.noPrice || latestData.noPrice) : 0;
 
   return (
-    <div className={`bg-muted/20 rounded-lg p-4 ${className}`}>
+    <div className={`bg-muted/20 rounded-lg p-4 w-full ${className}`}>
       {/* Chart Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">

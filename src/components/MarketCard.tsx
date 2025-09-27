@@ -22,6 +22,7 @@ export function MarketCard({
 
   const handlePredictionClick = (outcome: 'YES' | 'NO') => {
     console.log('Prediction clicked:', outcome, market.question);
+    console.log('Opening modal with market:', market);
     openModal(market, outcome);
   };
   
@@ -133,12 +134,14 @@ export function MarketCard({
       </div>
 
       {/* Market Chart */}
-      <MarketChart 
-        marketId={market.id}
-        currentYesPrice={yesPrice}
-        currentNoPrice={noPrice}
-        className="mb-3"
-      />
+      <div className="w-full">
+        <MarketChart 
+          marketId={market.id}
+          currentYesPrice={yesPrice}
+          currentNoPrice={noPrice}
+          className="mb-3 w-full"
+        />
+      </div>
 
       {/* Tags */}
       {market.tags.length > 0 && (

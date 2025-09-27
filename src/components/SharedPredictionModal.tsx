@@ -28,7 +28,10 @@ export function SharedPredictionModal({
   const [amount, setAmount] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
 
+  console.log('SharedPredictionModal render:', { isOpen, market: market?.question, outcome });
+
   if (!isOpen || !market || !outcome) {
+    console.log('SharedPredictionModal: Not rendering because:', { isOpen, hasMarket: !!market, outcome });
     return null;
   }
 
@@ -88,7 +91,7 @@ export function SharedPredictionModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 min-h-screen">
-      <div className="bg-background rounded-lg shadow-xl max-w-2xl w-full mx-auto my-auto max-h-[90vh] overflow-y-auto">
+      <div className="bg-background rounded-lg shadow-xl w-full max-w-md mx-auto my-auto max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gradient-gold font-orbitron">
@@ -293,7 +296,7 @@ Thank you for using PredictMarket!
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 min-h-screen">
-      <div className="bg-background rounded-lg shadow-xl max-w-md w-full mx-auto my-auto">
+      <div className="bg-background rounded-lg shadow-xl w-full max-w-md mx-auto my-auto">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gradient-gold font-orbitron">

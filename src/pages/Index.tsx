@@ -21,6 +21,8 @@ const Index = () => {
     closeReceipt 
   } = usePredictionModal();
 
+  console.log('Index: Modal state:', { isOpen, selectedMarket: selectedMarket?.question, selectedOutcome });
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center">
       <Header />

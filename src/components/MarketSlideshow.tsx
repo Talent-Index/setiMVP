@@ -110,12 +110,12 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
             </div>
 
             {/* Market Chart */}
-            <div className="mb-6 md:mb-8">
+            <div className="mb-6 md:mb-8 w-full max-w-2xl mx-auto">
               <MarketChart 
                 marketId={currentMarket.id}
                 currentYesPrice={yesPrice}
                 currentNoPrice={noPrice}
-                className="bg-black/20 backdrop-blur-sm"
+                className="bg-black/20 backdrop-blur-sm w-full"
               />
             </div>
 
