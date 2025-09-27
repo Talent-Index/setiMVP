@@ -84,35 +84,32 @@
   /* Market Button Variants */
   .btn-market-gold {
     @apply bg-gradient-to-r from-primary to-yellow-400 text-primary-foreground font-bold 
-           shadow-[var(--shadow-elegant)] hover:shadow-[var(--glow-gold)] 
-           transition-all duration-300 hover:scale-105;
+           shadow-[var(--shadow-elegant)] 
+           transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50;
   }
   
   .btn-market-success {
     @apply bg-gradient-to-r from-green-500 to-emerald-400 text-black font-bold 
-           shadow-[var(--shadow-elegant)] hover:shadow-[var(--glow-success)] 
-           transition-all duration-300 hover:scale-105;
+           shadow-[var(--shadow-elegant)] 
+           transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500/50;
   }
   
   .btn-market-danger {
     @apply bg-gradient-to-r from-red-500 to-rose-400 text-foreground font-bold 
-           shadow-[var(--shadow-elegant)] hover:shadow-[var(--glow-danger)] 
-           transition-all duration-300 hover:scale-105;
+           shadow-[var(--shadow-elegant)] 
+           transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500/50;
   }
 
   /* Market Card Styles */
   .market-card {
     @apply bg-gradient-to-br from-card to-muted border border-border 
            rounded-2xl p-6 shadow-[var(--shadow-market)] 
-           hover:shadow-[var(--glow-gold)] transition-all duration-500 
-           hover:scale-[1.02] backdrop-blur-sm;
+           transition-all duration-200 
+           hover:scale-[1.02] backdrop-blur-sm focus-within:ring-2 focus-within:ring-primary/50;
   }
   
   .market-card-glow {
-    @apply relative before:absolute before:-inset-1 before:bg-gradient-to-r 
-           before:from-primary/20 before:via-accent/20 before:to-primary/20 
-           before:rounded-2xl before:blur-sm before:opacity-0 
-           hover:before:opacity-100 before:transition-opacity before:duration-500;
+    @apply relative;
   }
 
   /* Typography Styles */
@@ -131,5 +128,25 @@
   
   .market-glow {
     @apply drop-shadow-[0_0_10px_theme(colors.primary/0.3)];
+  }
+
+  /* Accessibility Improvements */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+
+  /* Focus Management */
+  .focus-visible {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  /* Smooth Scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better Text Selection */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
   }
 }

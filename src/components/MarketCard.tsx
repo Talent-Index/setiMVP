@@ -1,35 +1,53 @@
 import { Button } from "@/components/ui/button";
 import { MarketBadge } from "./MarketBadge";
-import { TrendingUp, TrendingDown, Users, Clock } from "lucide-react";
+import { TrendingUp, TrendingDown, Users, Clock, Image as ImageIcon, BarChart3 } from "lucide-react";
+import { Market, calculatePrices, formatTimeRemaining, formatVolume } from "@/types/contract";
+import { usePredictionModal } from "@/hooks/usePredictionModal";
 
 interface MarketCardProps {
-  title: string;
-  description: string;
-  yesPrice: number;
-  noPrice: number;
-  volume: string;
-  timeLeft: string;
-  participants: number;
+  market: Market;
   trending?: "up" | "down";
-  category: string;
 }
 
 export function MarketCard({
-  title,
-  description,
-  yesPrice,
-  noPrice,
-  volume,
-  timeLeft,
-  participants,
-  trending,
-  category
+  market,
+  trending
 }: MarketCardProps) {
+  const { yesPrice, noPrice } = calculatePrices(market.outcome_a_shares, market.outcome_b_shares);
+  const timeLeft = formatTimeRemaining(market.end_time);
+  const volume = formatVolume(market.volume_24h);
+  
+  const { openModal } = usePredictionModal();
+
+  const handlePredictionClick = (outcome: 'YES' | 'NO') => {
+    console.log('Prediction clicked:', outcome, market.question);
+    openModal(market, outcome);
+  };
+  
   return (
-    <div className="market-card market-card-glow group">
-      <div className="flex items-start justify-between mb-4">
+    <div className="market-card group p-4 md:p-5 w-full max-w-sm mx-auto h-fit flex flex-col">
+      {/* Market Image */}
+      {market.image_url && (
+        <div className="w-full h-24 md:h-32 mb-3 md:mb-4 rounded-lg overflow-hidden bg-muted/30 flex-shrink-0">
+          <img 
+            src={market.image_url} 
+            alt={market.question}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+          <div className="hidden w-full h-full flex items-center justify-center">
+            <ImageIcon className="w-8 h-8 text-muted-foreground" />
+          </div>
+        </div>
+      )}
+      
+      {/* Header with Badge and Trending */}
+      <div className="flex items-start justify-between mb-3 md:mb-4 flex-shrink-0">
         <MarketBadge variant="purple" className="text-xs">
-          {category}
+          {market.category}
         </MarketBadge>
         {trending && (
           <div className={`flex items-center gap-1 ${trending === 'up' ? 'text-success' : 'text-danger'}`}>
@@ -39,49 +57,97 @@ export function MarketCard({
         )}
       </div>
 
-      <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-gradient-gold transition-all duration-300">
-        {title}
+      {/* Title */}
+      <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-gradient-gold transition-all duration-300 line-clamp-2 flex-shrink-0">
+        {market.question}
       </h3>
       
-      <p className="text-sm text-muted-foreground mb-6 line-clamp-2">
-        {description}
+      {/* Description */}
+      <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-shrink-0">
+        {market.description}
       </p>
 
+      {/* Market Status */}
+      {market.resolved && (
+        <div className="mb-4 p-2 rounded-lg bg-muted/30 flex-shrink-0">
+          <div className="text-xs text-muted-foreground mb-1">Market Status</div>
+          <div className={`text-sm font-medium ${
+            market.winning_outcome === 0 ? 'text-danger' : 
+            market.winning_outcome === 1 ? 'text-success' : 
+            'text-muted-foreground'
+          }`}>
+            {market.winning_outcome === 0 ? 'NO' : 
+             market.winning_outcome === 1 ? 'YES' : 
+             'INVALID/CANCELED'}
+          </div>
+        </div>
+      )}
+
+      {/* Market Stats */}
+      <div className="mb-3 p-2 bg-muted/20 rounded-lg flex-shrink-0">
+        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+          <div className="flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            <span>{(market.total_liquidity / 1_000_000_000).toFixed(2)} SUI</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            <span>{timeLeft}</span>
+          </div>
+        </div>
+        
+        {/* Price Movement */}
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-muted-foreground">24h Volume</span>
+          <div className="flex items-center gap-1">
+            <BarChart3 className="w-3 h-3 text-success" />
+            <span className="text-success font-medium">${volume}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Price Buttons */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-2 gap-2 mb-3 flex-shrink-0">
         <Button 
-          className="btn-market-success h-12 flex flex-col items-center justify-center"
+          className="btn-market-success h-12 flex flex-col items-center justify-center transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           variant="outline"
+          disabled={market.resolved}
+          onClick={() => handlePredictionClick('YES')}
         >
           <span className="text-xs opacity-80">YES</span>
-          <span className="text-lg font-bold">{yesPrice}¢</span>
+          <span className="text-sm font-bold">{yesPrice}¢</span>
         </Button>
         
         <Button 
-          className="btn-market-danger h-12 flex flex-col items-center justify-center"
+          className="btn-market-danger h-12 flex flex-col items-center justify-center transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           variant="outline"
+          disabled={market.resolved}
+          onClick={() => handlePredictionClick('NO')}
         >
           <span className="text-xs opacity-80">NO</span>
-          <span className="text-lg font-bold">{noPrice}¢</span>
+          <span className="text-sm font-bold">{noPrice}¢</span>
         </Button>
       </div>
 
-      {/* Market Stats */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <div className="flex items-center gap-1">
-          <Users className="w-3 h-3" />
-          <span>{participants.toLocaleString()}</span>
+      {/* Tags */}
+      {market.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-auto">
+          {market.tags.slice(0, 3).map((tag, index) => (
+            <span 
+              key={index}
+              className="text-xs px-2 py-1 bg-muted/30 rounded-full text-muted-foreground"
+            >
+              {tag}
+            </span>
+          ))}
+          {market.tags.length > 3 && (
+            <span className="text-xs px-2 py-1 bg-muted/30 rounded-full text-muted-foreground">
+              +{market.tags.length - 3}
+            </span>
+          )}
         </div>
-        
-        <div className="flex items-center gap-1">
-          <Clock className="w-3 h-3" />
-          <span>{timeLeft}</span>
-        </div>
-        
-        <div className="text-gradient-gold font-medium">
-          ${volume}
-        </div>
-      </div>
+      )}
+
     </div>
   );
 }

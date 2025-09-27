@@ -1,141 +1,146 @@
 import { Header } from "@/components/Header";
-import { HeroSection } from "@/components/HeroSection";
 import { MarketCard } from "@/components/MarketCard";
+import { MarketSlideshow } from "@/components/MarketSlideshow";
+import { SharedPredictionModal } from "@/components/SharedPredictionModal";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Flame, Filter, ArrowRight } from "lucide-react";
-
-const TRENDING_MARKETS = [
-  {
-    title: "Will Bitcoin hit $100K by end of 2024?",
-    description: "BTC has been climbing steadily. Major institutions are bullish, but market volatility remains high.",
-    yesPrice: 67,
-    noPrice: 33,
-    volume: "842K",
-    timeLeft: "89d 14h",
-    participants: 12847,
-    trending: "up" as const,
-    category: "Crypto"
-  },
-  {
-    title: "Will Tesla stock reach $300 before Q2 2025?",
-    description: "Tesla's autonomous driving progress and energy business expansion could drive significant growth.",
-    yesPrice: 42,
-    noPrice: 58,
-    volume: "634K", 
-    timeLeft: "156d 8h",
-    participants: 9632,
-    trending: "down" as const,
-    category: "Stocks"
-  },
-  {
-    title: "Will AI pass the Turing Test in 2024?",
-    description: "Recent advances in LLMs suggest we're closer than ever to artificial general intelligence.",
-    yesPrice: 73,
-    noPrice: 27,
-    volume: "458K",
-    timeLeft: "42d 22h",
-    participants: 7891,
-    trending: "up" as const,
-    category: "Technology"
-  },
-  {
-    title: "Will Manchester City win the Premier League?",
-    description: "City leads the table but Arsenal and Liverpool are close behind in a thrilling season.",
-    yesPrice: 55,
-    noPrice: 45,
-    volume: "523K",
-    timeLeft: "78d 5h",
-    participants: 15234,
-    category: "Sports"
-  },
-  {
-    title: "Will the Fed cut interest rates by 0.5% in March?",
-    description: "Inflation data suggests the Fed may take aggressive action to stimulate economic growth.",
-    yesPrice: 38,
-    noPrice: 62,
-    volume: "721K",
-    timeLeft: "67d 11h",
-    participants: 8967,
-    category: "Economics"
-  },
-  {
-    title: "Will SpaceX land on Mars by 2026?",
-    description: "Starship development is accelerating, but technical challenges remain formidable.",
-    yesPrice: 29,
-    noPrice: 71,
-    volume: "387K",
-    timeLeft: "234d 16h",
-    participants: 6543,
-    trending: "up" as const,
-    category: "Space"
-  }
-];
+import { Flame, Filter, ArrowRight, Plus } from "lucide-react";
+import { useMarkets } from "@/hooks/useMarkets";
+import { usePredictionModal } from "@/hooks/usePredictionModal";
 
 const Index = () => {
+  const { markets, isLoading, error, refetch } = useMarkets();
+  const { isOpen, selectedMarket, selectedOutcome, closeModal } = usePredictionModal();
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center">
       <Header />
-      <HeroSection />
+      
+          {/* Market Slideshow */}
+          {markets.length > 0 && (
+            <section className="py-4 md:py-8 w-full flex justify-center">
+              <div className="container mx-auto px-4 flex justify-center">
+                <div className="w-full max-w-6xl flex justify-center">
+                  <MarketSlideshow markets={markets.slice(0, 4)} />
+                </div>
+              </div>
+            </section>
+          )}
       
       {/* Main Markets Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <Flame className="w-6 h-6 text-primary" />
-              <h2 className="text-3xl font-bold text-gradient-gold font-orbitron">
-                Trending Markets
-              </h2>
-            </div>
-            <Button variant="outline" className="gap-2">
-              <Filter className="w-4 h-4" />
-              Filter
-            </Button>
-          </div>
-
-          <Tabs defaultValue="all" className="mb-8">
-            <TabsList className="bg-muted/30 border border-border/50">
-              <TabsTrigger value="all">All Markets</TabsTrigger>
-              <TabsTrigger value="crypto">Crypto</TabsTrigger>
-              <TabsTrigger value="stocks">Stocks</TabsTrigger>
-              <TabsTrigger value="sports">Sports</TabsTrigger>
-              <TabsTrigger value="politics">Politics</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="all" className="mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {TRENDING_MARKETS.map((market, index) => (
-                  <MarketCard key={index} {...market} />
-                ))}
+      <section className="py-8 md:py-16 w-full flex justify-center">
+        <div className="container mx-auto px-4 flex justify-center">
+          <div className="w-full max-w-7xl flex flex-col items-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center mb-6 md:mb-8 gap-4 w-full">
+              <div className="flex items-center gap-3">
+                <Flame className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                <h2 className="text-2xl md:text-3xl font-bold text-gradient-gold font-orbitron">
+                  Live Markets
+                </h2>
               </div>
-            </TabsContent>
-          </Tabs>
+              <Button 
+                variant="outline" 
+                className="gap-2 w-full sm:w-auto transition-all duration-200 hover:scale-105"
+                onClick={() => {
+                  // TODO: Implement filter functionality
+                }}
+              >
+                <Filter className="w-4 h-4" />
+                Filter
+              </Button>
+            </div>
 
-          {/* Load More */}
-          <div className="text-center">
-            <Button size="lg" className="btn-market-gold gap-2">
-              Load More Markets
-              <ArrowRight className="w-4 h-4" />
-            </Button>
+            <Tabs defaultValue="all" className="mb-6 md:mb-8 w-full flex flex-col items-center">
+              <TabsList className="bg-muted/30 border border-border/50 w-full sm:w-auto overflow-x-auto flex justify-center">
+                <TabsTrigger value="all" className="text-xs sm:text-sm">All Markets</TabsTrigger>
+                <TabsTrigger value="crypto" className="text-xs sm:text-sm">Crypto</TabsTrigger>
+                <TabsTrigger value="stocks" className="text-xs sm:text-sm">Stocks</TabsTrigger>
+                <TabsTrigger value="sports" className="text-xs sm:text-sm">Sports</TabsTrigger>
+                <TabsTrigger value="politics" className="text-xs sm:text-sm">Politics</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="all" className="mt-8">
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Loading markets...</p>
+                  </div>
+                ) : error ? (
+                  <div className="text-center py-12">
+                    <p className="text-destructive mb-4">{error}</p>
+                    <Button onClick={refetch}>
+                      Try Again
+                    </Button>
+                  </div>
+                ) : markets.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Plus className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-xl font-semibold mb-2">No markets yet</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Be the first to create a prediction market!
+                    </p>
+                    <Button 
+                      className="btn-market-gold gap-2"
+                      onClick={() => {
+                        // Scroll to top to show the header with wallet connection
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        // Show a message to connect wallet first
+                        setTimeout(() => {
+                          alert('Please connect your wallet first using the "Connect Sui Wallet" button in the header to create markets');
+                        }, 500);
+                      }}
+                    >
+                      <Plus className="w-4 h-4" />
+                      Connect Wallet to Create Market
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full justify-items-center">
+                    {markets.map((market, index) => (
+                      <MarketCard 
+                        key={market.id} 
+                        market={market} 
+                        trending={index < 3 ? (index % 2 === 0 ? "up" : "down") : undefined}
+                      />
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+
+            {/* Load More */}
+            {markets.length > 0 && (
+              <div className="text-center mt-6 md:mt-8 w-full flex justify-center">
+                <Button 
+                  size="lg" 
+                  className="btn-market-gold gap-2 w-full sm:w-auto transition-all duration-200 hover:scale-105"
+                  onClick={() => {
+                    // TODO: Implement load more functionality
+                  }}
+                >
+                  Load More Markets
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/20 bg-muted/10 py-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
+      <footer className="border-t border-border/20 bg-muted/10 py-8 md:py-12 w-full flex justify-center">
+        <div className="container mx-auto px-4 flex justify-center">
+          <div className="w-full max-w-4xl text-center flex flex-col items-center">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-gold flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg font-orbitron">P</span>
+              <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-gradient-gold flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm md:text-lg font-orbitron">P</span>
               </div>
-              <span className="text-xl font-bold text-gradient-gold font-orbitron">PredictMarket</span>
+              <span className="text-lg md:text-xl font-bold text-gradient-gold font-orbitron">PredictMarket</span>
             </div>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            <p className="text-muted-foreground mb-4 md:mb-6 max-w-md mx-auto text-sm md:text-base">
               The future of prediction markets. Trade with confidence, win with style.
             </p>
-            <div className="flex justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-xs md:text-sm text-muted-foreground">
               <a href="#" className="hover:text-primary transition-colors">Terms</a>
               <a href="#" className="hover:text-primary transition-colors">Privacy</a>
               <a href="#" className="hover:text-primary transition-colors">Help</a>
@@ -144,6 +149,14 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Shared Prediction Modal */}
+      <SharedPredictionModal
+        isOpen={isOpen}
+        onClose={closeModal}
+        market={selectedMarket}
+        outcome={selectedOutcome}
+      />
     </div>
   );
 };
