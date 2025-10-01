@@ -1,5 +1,5 @@
 module polymarket::polymarket {
-    use sui::object::{Self, UID};
+    use sui::object::{Self, UID, ID};
     use sui::transfer;
     use sui::tx_context::{Self, TxContext};
     use sui::coin::{Self, Coin};
@@ -12,7 +12,7 @@ module polymarket::polymarket {
     use sui::sui::SUI;
 
     // Market object with all necessary data for frontend
-    struct Market has key {
+    public struct Market has key {
         id: UID,
         question: String,
         description: String,
@@ -33,7 +33,7 @@ module polymarket::polymarket {
     }
 
     // Event for market creation - frontend can listen to these
-    struct MarketCreated has copy, drop {
+    public struct MarketCreated has copy, drop {
         market_id: ID,
         creator: address,
         question: String,
@@ -41,7 +41,7 @@ module polymarket::polymarket {
     }
 
     // Event for trades - frontend can update UI in real-time
-    struct TradeExecuted has copy, drop {
+    public struct TradeExecuted has copy, drop {
         market_id: ID,
         trader: address,
         outcome: u8, // 0 or 1
@@ -50,14 +50,14 @@ module polymarket::polymarket {
     }
 
     // Event for liquidity provision
-    struct LiquidityProvided has copy, drop {
+    public struct LiquidityProvided has copy, drop {
         market_id: ID,
         provider: address,
         amount: u64
     }
 
     // Event for market resolution
-    struct MarketResolved has copy, drop {
+    public struct MarketResolved has copy, drop {
         market_id: ID,
         winning_outcome: u8,
         resolver: address
@@ -82,15 +82,17 @@ module polymarket::polymarket {
         initial_liquidity: Coin<SUI>,
         ctx: &mut TxContext
     ) {
-        let market_id = object::new(ctx);
-        let liquidity_balance = coin::into_balance(initial_liquidity);
+        let uid = object::new(ctx);
+        let market_id_for_event = object::uid_to_inner(&uid);
+        let mut liquidity_balance = coin::into_balance(initial_liquidity);
         let liquidity_amount = balance::value(&liquidity_balance);
         
         // Split initial liquidity equally between outcomes
-        let (outcome_a_balance, outcome_b_balance) = balance::split(&mut liquidity_balance, liquidity_amount / 2);
+        let outcome_a_balance = balance::split(&mut liquidity_balance, liquidity_amount / 2);
+        let outcome_b_balance = liquidity_balance;
         
         let market = Market {
-            id: market_id,
+            id: uid,
             question: string::utf8(question),
             description: string::utf8(description),
             end_time,
@@ -106,8 +108,8 @@ module polymarket::polymarket {
             category: string::utf8(category),
             image_url: string::utf8(image_url),
             tags: {
-                let converted_tags = vector::empty<String>();
-                let i = 0;
+                let mut converted_tags = vector::empty<String>();
+                let mut i = 0;
                 let len = vector::length(&tags);
                 while (i < len) {
                     vector::push_back(&mut converted_tags, string::utf8(*vector::borrow(&tags, i)));
@@ -122,7 +124,7 @@ module polymarket::polymarket {
 
         // Emit market created event
         event::emit(MarketCreated {
-            market_id: object::uid_to_inner(&market_id),
+            market_id: market_id_for_event,
             creator: tx_context::sender(ctx),
             question: string::utf8(question),
             end_time
@@ -196,8 +198,9 @@ module polymarket::polymarket {
         let provider = tx_context::sender(ctx);
 
         // Split liquidity equally between outcomes
-        let liquidity_balance = coin::into_balance(liquidity);
-        let (outcome_a_balance, outcome_b_balance) = balance::split(&mut liquidity_balance, liquidity_amount / 2);
+        let mut liquidity_balance = coin::into_balance(liquidity);
+        let outcome_a_balance = balance::split(&mut liquidity_balance, liquidity_amount / 2);
+        let outcome_b_balance = liquidity_balance;
 
         // Add to market balances
         balance::join(&mut market.outcome_a_shares, outcome_a_balance);
