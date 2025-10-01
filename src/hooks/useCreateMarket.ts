@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
+import { useSignAndExecuteTransaction, useSuiClient, useCurrentAccount } from '@mysten/dapp-kit';
+import type { SuiTransactionBlockResponse, SuiObjectResponse, SuiObjectChange, SuiObjectChangeCreated } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { CreateMarketParams, UseCreateMarketResult, PACKAGE_ID, MODULE } from '@/types/contract';
@@ -10,6 +11,7 @@ import { CreateMarketParams, UseCreateMarketResult, PACKAGE_ID, MODULE } from '@
 export function useCreateMarket(): UseCreateMarketResult {
   const client = useSuiClient();
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
+  const account = useCurrentAccount();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,7 +66,49 @@ export function useCreateMarket(): UseCreateMarketResult {
       });
 
       // Extract market ID from created objects
-      const marketId = extractMarketIdFromResult(result);
+      let marketId = extractMarketIdFromResult(result as SuiTransactionBlockResponse);
+      
+      // Fallback 1: inspect effects.created and fetch types
+      if (!marketId) {
+        const created = (result as SuiTransactionBlockResponse)?.effects?.created as Array<any> | undefined;
+        if (Array.isArray(created) && created.length > 0) {
+          for (const c of created) {
+            const id = c?.reference?.objectId || c?.objectId;
+            if (!id) continue;
+            try {
+              const obj: SuiObjectResponse = await client.getObject({ id, options: { showType: true } });
+              const ty = obj.data?.type;
+              if (ty && (ty.includes('::polymarket::Market') || ty.endsWith('::Market'))) { marketId = id; break; }
+            } catch (e) {
+              console.warn('getObject failed for created id', id, e);
+            }
+          }
+        }
+      }
+      
+      // Fallback 2: query owned objects by current account filtered by StructType
+      if (!marketId && account?.address) {
+        const tryFetchOwned = async () => {
+          const owned = await client.getOwnedObjects({
+            owner: account.address!,
+            filter: { StructType: `${PACKAGE_ID}::${MODULE}::Market` },
+            options: { showType: true },
+          });
+          const first: SuiObjectResponse | undefined = owned?.data?.[0];
+          const objectId = first?.data?.objectId;
+          return typeof objectId === 'string' ? objectId : null;
+        };
+        // Retry up to 5 times with small delays to allow indexers to catch up
+        for (let i = 0; i < 5 && !marketId; i++) {
+          try {
+            const candidate = await tryFetchOwned();
+            if (candidate) { marketId = candidate; break; }
+          } catch (e) {
+            console.warn('getOwnedObjects attempt failed', i + 1, e);
+          }
+          await new Promise((res) => setTimeout(res, 600));
+        }
+      }
       
       if (!marketId) {
         throw new Error('Failed to extract market ID from transaction result');
@@ -91,20 +135,30 @@ export function useCreateMarket(): UseCreateMarketResult {
 /**
  * Extract market ID from transaction result
  */
-function extractMarketIdFromResult(result: any): string | null {
+function extractMarketIdFromResult(result: SuiTransactionBlockResponse): string | null {
   try {
     // Look for created objects (top-level or under effects)
-    const objectChanges = result?.objectChanges || result?.effects?.objectChanges;
+    const objectChanges: SuiObjectChange[] | undefined = (result as SuiTransactionBlockResponse)?.objectChanges || (result as SuiTransactionBlockResponse)?.effects?.objectChanges as unknown as SuiObjectChange[] | undefined;
     if (Array.isArray(objectChanges)) {
       for (const change of objectChanges) {
-        if (
-          change?.type === 'created' &&
-          typeof change?.objectType === 'string' &&
-          change.objectType.includes('::polymarket::Market')
-        ) {
-          return change.objectId as string;
+        if (change?.type !== 'created') continue;
+        const created = change as SuiObjectChangeCreated;
+        const ot = created?.objectType as string | undefined;
+        if (typeof ot === 'string') {
+          if (
+            ot.includes('::polymarket::Market') ||
+            ot.endsWith('::Market') ||
+            ot.includes('::Market<')
+          ) {
+            return created.objectId as string;
+          }
         }
       }
+      // Final fallback: pick any created object that is not a SUI coin
+      const nonSui = objectChanges.find(
+        (c: SuiObjectChange) => c?.type === 'created' && typeof (c as SuiObjectChangeCreated)?.objectType === 'string' && !(c as SuiObjectChangeCreated).objectType.startsWith('0x2::coin::Coin<0x2::sui::SUI>')
+      ) as SuiObjectChangeCreated | undefined;
+      if (nonSui?.objectId) return nonSui.objectId as string;
     }
 
     // Fallback: look in events
