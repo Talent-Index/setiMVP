@@ -2,7 +2,10 @@
 import { SuiObjectData } from '@mysten/sui/client';
 
 // Environment configuration
-export const PACKAGE_ID = import.meta.env.VITE_SUI_PACKAGE_ID || '0x0';
+export const PACKAGE_ID =
+  (import.meta as any).env?.VITE_PACKAGE_ID ||
+  (import.meta as any).env?.VITE_SUI_PACKAGE_ID ||
+  '0x9fb4dbbd21acb0e9c3f61a6f7bf91a098ebd772f87e764fcdfe582069936fdcb';
 export const MODULE = 'polymarket';
 
 // Market data interface matching the Move struct exactly

@@ -24,7 +24,7 @@ const App = () => (
         testnet: { url: getFullnodeUrl("testnet") },
         mainnet: { url: getFullnodeUrl("mainnet") },
       }}
-      defaultNetwork="devnet"
+      defaultNetwork={(import.meta as any).env?.VITE_SUI_NETWORK || "testnet"}
     >
       <WalletProvider>
         <PredictionModalProvider>

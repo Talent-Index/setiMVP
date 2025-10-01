@@ -21,10 +21,16 @@ export function useCreateMarket(): UseCreateMarketResult {
       // Convert SUI to MIST (1 SUI = 1,000,000,000 MIST)
       const initialLiquidityMist = Math.floor(params.initialLiquiditySui * 1_000_000_000);
       
-      // Convert endTime to Unix timestamp
-      const endTime = params.endTime instanceof Date 
-        ? Math.floor(params.endTime.getTime() / 1000)
-        : Math.floor(params.endTime);
+      // Convert endTime to milliseconds (Move contract uses ms via epoch_timestamp_ms)
+      let endTime = params.endTime instanceof Date
+        ? params.endTime.getTime()
+        : Number(params.endTime);
+      // Heuristic: if value looks like seconds (10 or 13 digits check), convert to ms
+      if (endTime < 1e12) {
+        endTime = Math.floor(endTime * 1000);
+      } else {
+        endTime = Math.floor(endTime);
+      }
 
       // Create transaction
       const tx = new Transaction();
@@ -46,12 +52,14 @@ export function useCreateMarket(): UseCreateMarketResult {
         ],
       });
 
-      // Execute transaction
-      const result = await signAndExecute({
-        transaction: tx,
+      // Execute transaction, then fetch full effects/events
+      const executed = await signAndExecute({ transaction: tx });
+      const result = await client.waitForTransaction({
+        digest: executed.digest,
         options: {
           showEffects: true,
           showObjectChanges: true,
+          showEvents: true,
         },
       });
 
@@ -85,25 +93,28 @@ export function useCreateMarket(): UseCreateMarketResult {
  */
 function extractMarketIdFromResult(result: any): string | null {
   try {
-    // Look for created objects in the transaction effects
-    const objectChanges = result.objectChanges;
-    
-    if (objectChanges) {
+    // Look for created objects (top-level or under effects)
+    const objectChanges = result?.objectChanges || result?.effects?.objectChanges;
+    if (Array.isArray(objectChanges)) {
       for (const change of objectChanges) {
-        if (change.type === 'created' && change.objectType?.includes('Market')) {
-          return change.objectId;
+        if (
+          change?.type === 'created' &&
+          typeof change?.objectType === 'string' &&
+          change.objectType.includes('::polymarket::Market')
+        ) {
+          return change.objectId as string;
         }
       }
     }
 
     // Fallback: look in events
-    const events = result.events;
-    if (events) {
+    const events = result?.events;
+    if (Array.isArray(events)) {
       for (const event of events) {
-        if (event.type.includes('MarketCreated')) {
+        if (typeof event?.type === 'string' && event.type.endsWith('::polymarket::MarketCreated')) {
           const parsedEvent = event.parsedJson;
-          if (parsedEvent && parsedEvent.market_id) {
-            return parsedEvent.market_id;
+          if (parsedEvent && typeof parsedEvent.market_id === 'string') {
+            return parsedEvent.market_id as string;
           }
         }
       }
