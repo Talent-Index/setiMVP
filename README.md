@@ -1,11 +1,11 @@
-# Seti
+# seti
 
 <div align="center">
   <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 24px;">
     <div style="width: 48px; height: 48px; border-radius: 8px; background: linear-gradient(135deg, #FFD700, #FFA500); display: flex; align-items: center; justify-content: center;">
       <span style="color: #1a1a1a; font-weight: bold; font-size: 24px; font-family: 'Orbitron', monospace;">S</span>
     </div>
-    <h1 style="font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Orbitron', monospace; margin: 0;">Seti</h1>
+    <h1 style="font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Orbitron', monospace; margin: 0;">seti</h1>
   </div>
   <p style="font-size: 18px; color: #666; max-width: 600px; margin: 0 auto 32px;">
     Professional prediction market platform built on Sui blockchain technology
@@ -16,7 +16,7 @@
 
 ## Overview
 
-Seti is a sophisticated prediction market platform that enables users to create, trade, and participate in prediction markets for real-world events. Built on the Sui blockchain, it provides a secure, transparent, and efficient environment for market participants to express their views on future outcomes.
+seti is a sophisticated prediction market platform that enables users to create, trade, and participate in prediction markets for real-world events. Built on the Sui blockchain, it provides a secure, transparent, and efficient environment for market participants to express their views on future outcomes.
 
 ## Core Features
 
@@ -149,7 +149,7 @@ src/
 
 ### Smart Contract Integration
 
-Seti integrates with a Sui Move smart contract (`polymarket::polymarket`) providing the following core functionality:
+seti integrates with a Sui Move smart contract (`polymarket::polymarket`) providing the following core functionality:
 
 | Function | Purpose | Parameters |
 |----------|---------|------------|
@@ -336,7 +336,7 @@ VITE_NETWORK=mainnet     # Network: devnet, testnet, or mainnet
 #### Optional Environment Variables
 ```env
 VITE_SUI_RPC_URL=https://fullnode.mainnet.sui.io:443
-VITE_APP_NAME=Seti
+VITE_APP_NAME=seti
 VITE_APP_VERSION=1.0.0
 ```
 
@@ -457,5 +457,5 @@ We extend our gratitude to the following organizations and communities:
 
 <div align="center">
   <p><strong>Built with ❤️ for the Sui ecosystem</strong></p>
-  <p><em>Seti - Where the future meets prediction markets</em></p>
+  <p><em>seti - Where the future meets prediction markets</em></p>
 </div>

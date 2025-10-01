@@ -265,7 +265,7 @@ Amount: ${receipt.amount} SUI
 Price: ${receipt.price}¢
 Potential Payout: ${receipt.potentialPayout} SUI
 
-Thank you for using PredictMarket!
+Thank you for using seti!
     `.trim()
 
     const blob = new Blob([receiptText], { type: "text/plain" })

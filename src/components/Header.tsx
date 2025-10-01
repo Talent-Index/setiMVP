@@ -113,7 +113,7 @@ export function Header() {
           <div className="w-8 h-8 rounded-lg bg-gradient-gold flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-lg font-orbitron">P</span>
           </div>
-          <span className="text-xl font-bold text-gradient-gold font-orbitron">PredictMarket</span>
+          <span className="text-xl font-bold text-gradient-gold font-orbitron">seti</span>
         </Link>
 
         {/* Search */}
