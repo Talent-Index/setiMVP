@@ -85,7 +85,7 @@ The demo showcases market browsing, trading, liquidity, and wallet integration o
 ### 1) Clone & install
 ```bash
 # Clone your fork or this repo
-git clone https://github.com/your-organization/seti.git
+git clone [https://github.com/your-organization/seti.git](https://github.com/Talent-Index/setiMVP.git)
 cd seti
 
 # Install dependencies
@@ -113,7 +113,7 @@ VITE_SUI_RPC_URL=https://fullnode.devnet.sui.io:443
 npm run dev
 # or: yarn dev
 ```
-Open http://localhost:5173 (Vite default) in your browser.
+Open http://localhost:8000 in your browser.
 
 > Tip: Connect your Sui wallet and ensure it’s on the same network defined in `VITE_NETWORK`.
 
