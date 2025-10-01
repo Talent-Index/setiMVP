@@ -246,7 +246,8 @@ VITE_APP_VERSION=1.0.0
 
 
 ### Market Setup
-<img width="826" height="880" alt="Market Setup" src="https://github.com/user-attachments/assets/2d26f94f-c169-4e80-af24-b51dc38e490b" />
+<img width="1701" height="956" alt="image" src="https://github.com/user-attachments/assets/ed4053fe-7830-4345-8b88-c3dc583fdb15" />
+
 
 ### Trading YES/NO
 <img width="1517" height="946" alt="Trading YES/NO" src="https://github.com/user-attachments/assets/04def0fe-73c3-4c44-912c-8e0946e4381b" />
