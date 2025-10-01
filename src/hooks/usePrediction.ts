@@ -10,6 +10,120 @@ export interface PredictionParams {
   amount: number; // in SUI
 }
 
+export interface StoredPrediction {
+  id: string;
+  marketId: string;
+  marketQuestion?: string;
+  marketCategory?: string;
+  outcome: 'YES' | 'NO';
+  amount: number;
+  price?: number;
+  potentialPayout?: number;
+  timestamp: string;
+  status: 'pending' | 'confirmed' | 'active' | 'resolved' | 'won' | 'lost';
+  actualPayout?: number;
+  settledAt?: string;
+}
+
+// Alias for backward compatibility
+export type Prediction = StoredPrediction;
+
+// LocalStorage key for predictions
+const PREDICTIONS_STORAGE_KEY = 'seti_predictions';
+
+// Get predictions from localStorage
+export function getPredictions(): StoredPrediction[] {
+  try {
+    const stored = localStorage.getItem(PREDICTIONS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error('Error reading predictions from localStorage:', error);
+    return [];
+  }
+}
+
+// Save predictions to localStorage
+export function savePredictions(predictions: StoredPrediction[]): void {
+  try {
+    localStorage.setItem(PREDICTIONS_STORAGE_KEY, JSON.stringify(predictions));
+  } catch (error) {
+    console.error('Error saving predictions to localStorage:', error);
+  }
+}
+
+// Get active predictions (pending, confirmed, or active)
+export function getActivePredictions(): StoredPrediction[] {
+  const predictions = getPredictions();
+  return predictions.filter(p => p.status === 'pending' || p.status === 'confirmed' || p.status === 'active');
+}
+
+// Get closed predictions (resolved, won, or lost)
+export function getClosedPredictions(): StoredPrediction[] {
+  const predictions = getPredictions();
+  return predictions.filter(p => p.status === 'resolved' || p.status === 'won' || p.status === 'lost');
+}
+
+// Get a single prediction by ID
+export function getPredictionById(id: string): StoredPrediction | undefined {
+  const predictions = getPredictions();
+  return predictions.find(p => p.id === id);
+}
+
+// Settle a prediction (mark as won or lost)
+export function settlePrediction(id: string, won: boolean, actualPayout?: number): boolean {
+  try {
+    const predictions = getPredictions();
+    const index = predictions.findIndex(p => p.id === id);
+    
+    if (index === -1) {
+      console.error(`Prediction with id ${id} not found`);
+      return false;
+    }
+    
+    predictions[index] = {
+      ...predictions[index],
+      status: won ? 'won' : 'lost',
+      actualPayout: actualPayout || 0,
+      settledAt: new Date().toISOString(),
+    };
+    
+    savePredictions(predictions);
+    return true;
+  } catch (error) {
+    console.error('Error settling prediction:', error);
+    return false;
+  }
+}
+
+// Calculate prediction statistics
+export function calculatePredictionStats() {
+  const predictions = getPredictions();
+  const active = getActivePredictions();
+  const closed = getClosedPredictions();
+  
+  const totalInvested = predictions.reduce((sum, p) => sum + p.amount, 0);
+  const totalPayout = closed.reduce((sum, p) => sum + (p.actualPayout || 0), 0);
+  const totalProfit = totalPayout - closed.reduce((sum, p) => sum + p.amount, 0);
+  
+  const wins = closed.filter(p => p.status === 'won').length;
+  const losses = closed.filter(p => p.status === 'lost').length;
+  const winRate = closed.length > 0 ? (wins / closed.length) * 100 : 0;
+  
+  const activeValue = active.reduce((sum, p) => sum + (p.potentialPayout || p.amount), 0);
+  
+  return {
+    totalInvested,
+    totalPayout,
+    totalProfit,
+    wins,
+    losses,
+    winRate,
+    activePositions: active.length,
+    closedPositions: closed.length,
+    activeValue,
+  };
+}
+
 export function usePrediction() {
   const { isConnected } = useCurrentWallet();
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
@@ -58,6 +172,21 @@ export function usePrediction() {
       });
 
       console.log('Prediction placed successfully:', result);
+      
+      // Save prediction to localStorage
+      const newPrediction: StoredPrediction = {
+        id: `pred_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        marketId: params.marketId,
+        outcome: params.outcome,
+        amount: params.amount,
+        timestamp: new Date().toISOString(),
+        status: 'confirmed',
+      };
+      
+      const predictions = getPredictions();
+      predictions.push(newPrediction);
+      savePredictions(predictions);
+      
       return true;
       
     } catch (err) {

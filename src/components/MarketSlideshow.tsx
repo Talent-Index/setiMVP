@@ -1,60 +1,62 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { MarketChart } from "./MarketChart";
-import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
-import { Market, calculatePrices, formatTimeRemaining, formatVolume } from "@/types/contract";
-import { usePredictionModal } from "@/hooks/usePredictionModal";
+"use client"
+
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { MarketChart } from "./MarketChart"
+import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react"
+import { type Market, calculatePrices, formatTimeRemaining, formatVolume } from "@/types/contract"
+import { usePredictionModal } from "@/hooks/usePredictionModal"
 
 interface MarketSlideshowProps {
-  markets: Market[];
+  markets: Market[]
 }
 
 export function MarketSlideshow({ markets }: MarketSlideshowProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const { openModal } = usePredictionModal();
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(true)
+  const { openModal } = usePredictionModal()
 
   // Auto-advance slideshow
   useEffect(() => {
-    if (!isPlaying) return;
+    if (!isPlaying) return
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % markets.length);
-    }, 5000); // Change slide every 5 seconds
+      setCurrentIndex((prev) => (prev + 1) % markets.length)
+    }, 5000) // Change slide every 5 seconds
 
-    return () => clearInterval(interval);
-  }, [isPlaying, markets.length]);
+    return () => clearInterval(interval)
+  }, [isPlaying, markets.length])
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + markets.length) % markets.length);
-  };
+    setCurrentIndex((prev) => (prev - 1 + markets.length) % markets.length)
+  }
 
   const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % markets.length);
-  };
+    setCurrentIndex((prev) => (prev + 1) % markets.length)
+  }
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
+    setCurrentIndex(index)
+  }
 
-  const handlePredictionClick = (outcome: 'YES' | 'NO') => {
-    openModal(currentMarket, outcome);
-  };
+  const handlePredictionClick = (outcome: "YES" | "NO") => {
+    openModal(currentMarket, outcome)
+  }
 
-  if (markets.length === 0) return null;
+  if (markets.length === 0) return null
 
-  const currentMarket = markets[currentIndex];
-  const { yesPrice, noPrice } = calculatePrices(currentMarket.outcome_a_shares, currentMarket.outcome_b_shares);
-  const timeLeft = formatTimeRemaining(currentMarket.end_time);
-  const volume = formatVolume(currentMarket.volume_24h);
+  const currentMarket = markets[currentIndex]
+  const { yesPrice, noPrice } = calculatePrices(currentMarket.outcome_a_shares, currentMarket.outcome_b_shares)
+  const timeLeft = formatTimeRemaining(currentMarket.end_time)
+  const volume = formatVolume(currentMarket.volume_24h)
 
   return (
-    <section className="relative w-full h-80 md:h-96 lg:h-[500px] overflow-hidden rounded-2xl bg-gradient-dark mx-auto">
+    <section className="relative w-full max-w-7xl h-80 md:h-96 lg:h-[500px] overflow-hidden rounded-2xl bg-gradient-dark mx-auto px-4">
       {/* Background Image */}
       {currentMarket.image_url && (
         <div className="absolute inset-0">
-          <img 
-            src={currentMarket.image_url} 
+          <img
+            src={currentMarket.image_url || "/placeholder.svg"}
             alt={currentMarket.question}
             className="w-full h-full object-cover opacity-30"
           />
@@ -75,9 +77,7 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
 
             {/* Market Question */}
             <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-              <span className="text-gradient-gold font-orbitron">
-                {currentMarket.question}
-              </span>
+              <span className="text-gradient-gold font-orbitron">{currentMarket.question}</span>
             </h1>
 
             {/* Market Description */}
@@ -93,25 +93,21 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
                 </div>
                 <div className="text-xs md:text-sm text-muted-foreground">YES / NO</div>
               </div>
-              
+
               <div className="flex items-center gap-2">
-                <div className="text-lg md:text-xl lg:text-2xl font-bold text-gradient-neon">
-                  ${volume}
-                </div>
+                <div className="text-lg md:text-xl lg:text-2xl font-bold text-gradient-neon">${volume}</div>
                 <div className="text-xs md:text-sm text-muted-foreground">24h Volume</div>
               </div>
-              
+
               <div className="flex items-center gap-2">
-                <div className="text-lg md:text-xl lg:text-2xl font-bold text-accent">
-                  {timeLeft}
-                </div>
+                <div className="text-lg md:text-xl lg:text-2xl font-bold text-accent">{timeLeft}</div>
                 <div className="text-xs md:text-sm text-muted-foreground">Time Left</div>
               </div>
             </div>
 
             {/* Market Chart */}
             <div className="mb-6 md:mb-8 w-full max-w-2xl mx-auto">
-              <MarketChart 
+              <MarketChart
                 marketId={currentMarket.id}
                 currentYesPrice={yesPrice}
                 currentNoPrice={noPrice}
@@ -121,17 +117,17 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="btn-market-success text-sm md:text-lg px-4 md:px-6 lg:px-8 py-3 md:py-4 lg:py-6 w-full sm:w-auto transition-all duration-200 hover:scale-105"
-                onClick={() => handlePredictionClick('YES')}
+                onClick={() => handlePredictionClick("YES")}
               >
                 Trade YES ({yesPrice}¢)
               </Button>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="btn-market-danger text-sm md:text-lg px-4 md:px-6 lg:px-8 py-3 md:py-4 lg:py-6 w-full sm:w-auto transition-all duration-200 hover:scale-105"
-                onClick={() => handlePredictionClick('NO')}
+                onClick={() => handlePredictionClick("NO")}
               >
                 Trade NO ({noPrice}¢)
               </Button>
@@ -169,9 +165,7 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
-                index === currentIndex
-                  ? 'bg-primary scale-125'
-                  : 'bg-white/30 hover:bg-white/50'
+                index === currentIndex ? "bg-primary scale-125" : "bg-white/30 hover:bg-white/50"
               }`}
             />
           ))}
@@ -192,7 +186,7 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
       {currentMarket.tags.length > 0 && (
         <div className="absolute top-4 md:top-6 right-4 md:right-6 flex flex-wrap gap-1 md:gap-2">
           {currentMarket.tags.slice(0, 3).map((tag, index) => (
-            <span 
+            <span
               key={index}
               className="px-2 md:px-3 py-1 bg-black/30 backdrop-blur-sm text-white text-xs md:text-sm rounded-full border border-white/20"
             >
@@ -201,7 +195,6 @@ export function MarketSlideshow({ markets }: MarketSlideshowProps) {
           ))}
         </div>
       )}
-
     </section>
-  );
+  )
 }
