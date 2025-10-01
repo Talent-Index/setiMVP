@@ -242,7 +242,8 @@ VITE_APP_VERSION=1.0.0
 > Replace these placeholders with real screenshots by adding files under `public/` (e.g., `public/screenshots/`) and updating the image paths below.
 
 ### Marketplace Overview
-<img width="1517" height="946" alt="Marketplace Overview" src="https://github.com/user-attachments/assets/19d8afe7-5b94-43da-83e8-050d4fad7642" />
+<img width="1701" height="956" alt="image" src="https://github.com/user-attachments/assets/46e124ae-d73e-4720-a136-0c6457ad4779" />
+
 
 ### Market Setup
 <img width="826" height="880" alt="Market Setup" src="https://github.com/user-attachments/assets/2d26f94f-c169-4e80-af24-b51dc38e490b" />
