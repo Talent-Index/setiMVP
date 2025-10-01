@@ -231,15 +231,9 @@ VITE_APP_VERSION=1.0.0
 | Name | Role | Contact |
 | ---- | ---- | ------- |
 | Mary Njoroge | Frontend Developer | marrianapeters00@gmail.com |
-| Graham | Full‑stack Engineer | jokumu25@gmail.com |
+| Graham | Full‑stack Engineer | grahanm@gmail.com |
 | John Mokaya | Frontend Developer | mokayaj857@gmail.com |
-| Peter Njuguna | Smart Contract Developer | stanleykariuki@example.com |
-
-> Want edits? Share final names/roles/emails and I’ll update the table.
-
-## 📸 Feature Snapshots
-
-> Replace these placeholders with real screenshots by adding files under `public/` (e.g., `public/screenshots/`) and updating the image paths below.
+| Peter Njuguna | Smart Contract Developer | peternjuguna@gmail.com|
 
 ### Marketplace Overview
 <img width="1701" height="956" alt="image" src="https://github.com/user-attachments/assets/46e124ae-d73e-4720-a136-0c6457ad4779" />
