@@ -1,15 +1,9 @@
-# seti
-
 <div align="center">
-  <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 24px;">
-    <div style="width: 48px; height: 48px; border-radius: 8px; background: linear-gradient(135deg, #FFD700, #FFA500); display: flex; align-items: center; justify-content: center;">
-      <span style="color: #1a1a1a; font-weight: bold; font-size: 24px; font-family: 'Orbitron', monospace;">S</span>
-    </div>
-    <h1 style="font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Orbitron', monospace; margin: 0;">seti</h1>
-  </div>
-  <p style="font-size: 18px; color: #666; max-width: 600px; margin: 0 auto 32px;">
-    Professional prediction market platform built on Sui blockchain technology
-  </p>
+
+# 🚀 seti
+
+**Professional prediction market platform built on Sui blockchain technology**
+
 </div>
 
 ---
