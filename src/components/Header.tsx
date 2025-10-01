@@ -110,9 +110,6 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-7xl w-full">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-lg bg-gradient-gold flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-lg font-orbitron">P</span>
-          </div>
           <span className="text-xl font-bold text-gradient-gold font-orbitron">seti</span>
         </Link>
 
