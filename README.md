@@ -1,461 +1,341 @@
 <div align="center">
 
-# 🚀 seti
+# 🔮 seti — Sui-native Prediction Markets
 
-**Professional prediction market platform built on Sui blockchain technology**
+**Create, trade, and resolve markets on real-world events — secured by the Sui blockchain**
+
+![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
+![Build](https://img.shields.io/badge/Build-Passing-success?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 </div>
 
----
+## 🌍 Overview
 
-## Overview
+Seti is a professional-grade prediction market platform that lets anyone launch a market, add liquidity, and trade YES/NO outcomes with transparent on-chain settlement. Built for speed and usability on Sui, it features real-time pricing, wallet-native flows, and a clean, responsive interface.
 
-seti is a sophisticated prediction market platform that enables users to create, trade, and participate in prediction markets for real-world events. Built on the Sui blockchain, it provides a secure, transparent, and efficient environment for market participants to express their views on future outcomes.
+Try the live demo: https://seti-mvp.vercel.app/
+
+## ✨ Key Features
+
+### 🏪 Marketplace & Discovery
+- **Browse live markets** across multiple categories (Crypto, Stocks, Sports, Politics, Tech, and more).
+- **Real-time pricing** for YES/NO outcomes with dynamic liquidity.
+- **Structured analytics**: 24h volume, total liquidity, and performance signals.
+
+### 📊 Market Analytics
+- **24h volume tracking** and market-level liquidity metrics.
+- **Performance visualization** to understand price momentum and risk.
+
+### 🧰 Market Creation
+- **One-click launch** of markets with question, description, end time, category, image, and tags.
+- **Initial liquidity** supplied in SUI with on-chain settlement.
+
+### 💧 Liquidity & Trading
+- **Add liquidity** to deepen markets and earn fees.
+- **Fast trades** with clear pre-trade payout and risk visibility.
+
+### 🧩 Technical Architecture
+- **TypeScript-first** implementation for strong typing.
+- **Custom React hooks** for blockchain interactions and state.
+- **Modular components** with clean separation of concerns.
+- **Robust error handling** and user-friendly feedback.
+
+### 🔐 Wallet-first UX
+- **Sui wallet integration** via `@mysten/dapp-kit`.
+- **Session persistence** and smooth signing flows.
+
+### 📱 Polished UX
+- **Modern, responsive UI** powered by Tailwind and shadcn/ui.
+- **Accessible components** with Radix primitives.
+
+## 🛠️ Tech Stack
+
+### Languages & Frameworks
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+
+### Styling & UI
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge)
+![Radix](https://img.shields.io/badge/Radix_UI-161618?style=for-the-badge)
+
+### Blockchain & Data
+![Sui](https://img.shields.io/badge/Sui-6FBCF0?style=for-the-badge)
+![Mysten dapp-kit](https://img.shields.io/badge/@mysten/dapp--kit-0A7AFF?style=for-the-badge)
+![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge)
 
 ## 🚀 Live Demo
 
-Experience seti in action: **[https://seti-mvp.vercel.app/](https://seti-mvp.vercel.app/)**
+Experience seti in action: **https://seti-mvp.vercel.app/**
+The demo showcases market browsing, trading, liquidity, and wallet integration on Sui.
 
-The live demo showcases all core features including market browsing, trading, and wallet integration on the Sui blockchain.
+## 🚀 Getting Started
 
-## Core Features
-
-### Marketplace Platform
-- **Live Market Browsing**: Access active prediction markets across multiple categories
-- **Category Management**: Organized markets in Crypto, Stocks, Sports, Politics, Technology, Economics, Space, and more
-- **Dynamic Pricing**: Real-time YES/NO pricing based on market liquidity and trading activity
-- **Market Analytics**: Comprehensive 24h volume tracking, total liquidity metrics, and performance visualization
-- **Responsive Interface**: Optimized user experience across desktop, tablet, and mobile devices
-
-### Trading Infrastructure
-- **Streamlined Trading**: Intuitive one-click YES/NO prediction placement with immediate feedback
-- **Automated Market Making**: Advanced pricing algorithms with liquidity pool management
-- **Portfolio Tracking**: Comprehensive prediction tracking with potential payout calculations
-- **Risk Assessment**: Transparent pricing and payout calculations before trade execution
-
-### User Experience
-- **Professional Interface**: Clean, modern design with dark theme support
-- **Wallet Integration**: Seamless Sui wallet connection and management
-- **Session Persistence**: Automatic wallet connection restoration across sessions
-- **Real-time Data**: Live market data and price updates
-- **Cross-platform Compatibility**: Fully responsive design for all device types
-
-### Technical Architecture
-- **TypeScript Implementation**: Complete type safety and enhanced development experience
-- **Custom React Hooks**: Specialized hooks for blockchain interactions and state management
-- **Modular Design**: Clean separation of concerns with maintainable code structure
-- **Error Management**: Comprehensive error handling with user-friendly feedback
-- **Testing Framework**: Structured architecture for comprehensive testing and quality assurance
-
-## Getting Started
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- A Sui-compatible wallet (Sui Wallet, Suiet)
 
 ### System Requirements
+- Modern browser: Chrome 90+, Firefox 88+, Safari 14+, or Edge 90+.
+- Network access to Sui Devnet/Testnet/Mainnet.
 
-- **Node.js** 18.0 or higher
-- **Package Manager**: npm 8.0+ or yarn 1.22+
-- **Browser**: Chrome 90+, Firefox 88+, Safari 14+, or Edge 90+
-- **Sui Wallet**: Sui Wallet or Suiet browser extension
-- **Network Access**: Sui Devnet, Testnet, or Mainnet connectivity
-
-### Installation Guide
-
-#### 1. Repository Setup
+### 1) Clone & install
 ```bash
-git clone https://github.com/your-organization/seti.git
-cd seti
-```
-
-#### 2. Dependency Installation
-```bash
-npm install
-# Alternative: yarn install
-```
-
-#### 3. Environment Configuration
-```bash
-cp .env.example .env.local
-```
-
-Configure environment variables in `.env.local`:
-```env
-# Sui Blockchain Configuration
-VITE_SUI_PACKAGE_ID=0x0  # Deployed contract package ID
-VITE_NETWORK=devnet      # Network: devnet, testnet, or mainnet
-
-# Optional: Custom RPC endpoints
-VITE_SUI_RPC_URL=https://fullnode.devnet.sui.io:443
-```
-
-#### 4. Development Server
-```bash
-npm run dev
-# Alternative: yarn dev
-```
-
-#### 5. Application Access
-Open your browser and navigate to: `http://localhost:8080`
-
-## Technical Architecture
-
-### Technology Stack
-
-| Component | Technology | Version | Purpose |
-|-----------|------------|---------|---------|
-| **Frontend Framework** | React | 18.3.1 | User interface and component management |
-| **Language** | TypeScript | 5.8.3 | Type safety and enhanced development experience |
-| **Build Tool** | Vite | 5.4.19 | Fast development server and production builds |
-| **Styling** | Tailwind CSS | 3.4.17 | Utility-first CSS framework |
-| **UI Components** | shadcn/ui + Radix UI | Latest | Accessible and customizable components |
-| **Blockchain** | Sui + @mysten/dapp-kit | 1.38.0 | Blockchain integration and wallet management |
-| **State Management** | React Query | 5.83.0 | Server state management and caching |
-| **Routing** | React Router | 6.30.1 | Client-side routing and navigation |
-| **Icons** | Lucide React | 0.462.0 | Consistent icon library |
-| **Forms** | React Hook Form + Zod | Latest | Form management and validation |
-
-### Project Structure
-
-```
-src/
-├── components/                    # Reusable UI components
-│   ├── ui/                       # Base UI components (shadcn/ui)
-│   │   ├── button.tsx           # Button component
-│   │   ├── input.tsx            # Input component
-│   │   ├── dialog.tsx           # Modal components
-│   │   └── ...                  # Additional UI primitives
-│   ├── Header.tsx               # Navigation and wallet connection
-│   ├── MarketCard.tsx           # Individual market display
-│   ├── MarketSlideshow.tsx      # Featured markets carousel
-│   ├── CreateMarketModal.tsx    # Market creation form
-│   ├── PredictionModal.tsx      # Trading interface
-│   ├── WalletModal.tsx          # Wallet selection
-│   └── MarketBadge.tsx          # Market category badges
-├── hooks/                        # Custom React hooks
-│   ├── useMarkets.ts            # Market data fetching and management
-│   ├── useCreateMarket.ts       # Market creation functionality
-│   ├── useMarket.ts             # Single market data retrieval
-│   ├── usePrediction.ts         # Trading and prediction placement
-│   ├── useLiquidity.ts          # Liquidity management
-│   ├── useMarketPrices.ts       # Price calculation and updates
-│   ├── useMarketResolution.ts   # Market resolution handling
-│   └── use-toast.ts             # Toast notification system
-├── pages/                        # Page components
-│   ├── Index.tsx                # Main marketplace page
-│   └── NotFound.tsx             # 404 error page
-├── types/                        # TypeScript type definitions
-│   └── contract.ts              # Sui contract interfaces and types
-├── App.tsx                      # Main application component
-└── main.tsx                     # Application entry point
-```
-
-### Smart Contract Integration
-
-seti integrates with a Sui Move smart contract (`polymarket::polymarket`) providing the following core functionality:
-
-| Function | Purpose | Parameters |
-|----------|---------|------------|
-| **`create_market`** | Initialize new prediction markets | question, description, end_time, category, image_url, tags, initial_liquidity |
-| **`get_market_info`** | Retrieve market details and status | market object reference |
-| **`place_prediction`** | Execute trades on market outcomes | market_id, outcome, amount |
-| **`add_liquidity`** | Provide additional market liquidity | market_id, liquidity_amount |
-| **`resolve_market`** | Resolve completed markets | market_id, winning_outcome |
-| **`withdraw_liquidity`** | Remove liquidity from markets | market_id, amount |
-| **`claim_winnings`** | Claim resolved market payouts | market_id |
-
-## User Guide
-
-### Trading Workflow
-
-#### 1. Wallet Connection
-- Click "Connect Sui Wallet" in the application header
-- Select your preferred Sui wallet (Sui Wallet or Suiet)
-- Authorize the connection and verify your wallet address
-- Your wallet balance will be displayed in the header
-
-#### 2. Market Exploration
-- Browse active markets using the category filters
-- View market details including question, description, and end time
-- Analyze current YES/NO prices and market liquidity
-- Review 24h volume and total liquidity metrics
-
-#### 3. Prediction Placement
-- Click "Trade YES" or "Trade NO" on your selected market
-- Enter your prediction amount in SUI (minimum 0.1 SUI)
-- Review the potential payout calculation
-- Confirm your prediction and authorize the transaction
-
-#### 4. Portfolio Management
-- Monitor your active predictions in the portfolio section
-- Track potential payouts and market performance
-- Claim winnings when markets are resolved
-
-### Market Creation Process
-
-#### 1. Prerequisites
-- Ensure your wallet is connected and has sufficient SUI balance
-- Have market details prepared (question, description, end time)
-- Prepare an image URL for market visualization
-
-#### 2. Market Setup
-- Click "Create Market" in the application header
-- Enter the market question (clear and specific)
-- Provide a detailed description with context
-- Set the market end time (must be in the future)
-- Select appropriate category and add relevant tags
-
-#### 3. Market Launch
-- Add initial liquidity (minimum 1 SUI)
-- Review all market details for accuracy
-- Confirm and deploy the market to the blockchain
-- Share your market with the community
-
-### Market Categories
-
-| Category | Description | Examples |
-|----------|-------------|----------|
-| **Crypto** | Cryptocurrency and blockchain predictions | Bitcoin price, DeFi protocols, NFT trends |
-| **Stocks** | Stock market and company performance | Company earnings, stock prices, market indices |
-| **Sports** | Sports events and athlete performance | Game outcomes, tournament results, player stats |
-| **Politics** | Political events and policy changes | Elections, legislation, government decisions |
-| **Technology** | Tech industry and product launches | Company announcements, product releases, tech trends |
-| **Economics** | Economic indicators and market trends | GDP growth, inflation rates, employment data |
-| **Space** | Space exploration and astronomy | Mission launches, astronomical events, space technology |
-| **Other** | Miscellaneous real-world events | Weather, entertainment, social trends |
-
-## Development
-
-### Development Scripts
-
-| Command | Purpose | Description |
-|---------|---------|-------------|
-| `npm run dev` | Development server | Start Vite development server with hot reload |
-| `npm run build` | Production build | Create optimized production build |
-| `npm run build:dev` | Development build | Create development build for testing |
-| `npm run preview` | Preview build | Preview production build locally |
-| `npm run lint` | Code linting | Run ESLint for code quality checks |
-
-### Code Quality Standards
-
-- **TypeScript**: Strict mode enabled for type safety
-- **ESLint**: Configured with React and TypeScript rules
-- **Code Formatting**: Consistent code style across the project
-- **Commit Messages**: Conventional commit format for clear history
-- **Testing**: Comprehensive test coverage (when implemented)
-
-### Development Workflow
-
-#### 1. Environment Setup
-```bash
-# Clone repository
+# Clone your fork or this repo
 git clone https://github.com/your-organization/seti.git
 cd seti
 
 # Install dependencies
 npm install
+# or: yarn install
+```
 
-# Start development server
+### 2) Configure environment
+Copy and adjust env values:
+```bash
+cp .env.example .env.local
+```
+Then edit `.env.local`:
+```env
+# Sui Blockchain
+VITE_SUI_PACKAGE_ID=0x0          # Your deployed Move package ID
+VITE_NETWORK=devnet              # devnet | testnet | mainnet
+
+# Optional RPC override
+VITE_SUI_RPC_URL=https://fullnode.devnet.sui.io:443
+```
+
+### 3) Run the app
+```bash
 npm run dev
+# or: yarn dev
+```
+Open http://localhost:5173 (Vite default) in your browser.
+
+> Tip: Connect your Sui wallet and ensure it’s on the same network defined in `VITE_NETWORK`.
+
+## 🔗 Smart Contracts
+- Move module: `contract/sources/polymarket.move`
+- Provides core entry functions like `create_market`, liquidity ops, and market resolution primitives consumed by the frontend (`src/hooks/`).
+- Frontend interactions are handled via `@mysten/dapp-kit` and typed helpers in `src/types/contract`.
+
+### Contract Entry Points
+| Function | Purpose | Parameters |
+|----------|---------|------------|
+| `create_market` | Initialize a new market | question, description, end_time, category, image_url, tags, initial_liquidity |
+| `get_market_info` | Retrieve market details and status | market object reference |
+| `place_prediction` | Trade on market outcomes | market_id, outcome, amount |
+| `add_liquidity` | Provide additional market liquidity | market_id, liquidity_amount |
+| `resolve_market` | Resolve completed markets | market_id, winning_outcome |
+| `withdraw_liquidity` | Remove liquidity from markets | market_id, amount |
+| `claim_winnings` | Claim payouts for resolved markets | market_id |
+
+## 📦 Project Structure
+```
+src/
+├─ components/           # UI + domain components (shadcn/ui)
+├─ hooks/                # Data + blockchain interactions (React hooks)
+├─ pages/                # Page-level components
+├─ types/                # Contract + app types
+├─ App.tsx               # App shell
+└─ main.tsx              # Entry point
+contract/
+└─ sources/polymarket.move  # Move sources
 ```
 
-#### 2. Feature Development
+## 🧭 User Guide
+
+### Trading Workflow
+- **Connect Wallet**: Use the header to connect Sui Wallet or Suiet.
+- **Explore Markets**: Browse categories, read details, and check YES/NO prices and liquidity.
+- **Place Prediction**: Select YES/NO, enter SUI amount, review payout estimate, and sign.
+- **Manage Portfolio**: Track active positions and claim when resolved.
+
+### Market Creation Process
+- **Prerequisites**: Connected wallet, sufficient SUI, and a clear market question.
+- **Setup**: Provide question, description, end time (future), category, image, and tags.
+- **Launch**: Add initial liquidity and publish on-chain.
+
+### Market Categories
+| Category | Description | Examples |
+|----------|-------------|----------|
+| Crypto | Blockchain and crypto predictions | BTC price, L2 adoption, NFT volumes |
+| Stocks | Equity and company performance | Earnings beats, price targets |
+| Sports | Sports and athlete performance | Match outcomes, standings |
+| Politics | Elections and policy | Election winners, bills passing |
+| Technology | Product launches and tech | Feature releases, company metrics |
+| Economics | Macro indicators | GDP, CPI, employment |
+| Space | Exploration and astronomy | Launches, missions |
+| Other | Everything else | Culture, entertainment |
+
+## 🧪 Developer Experience
+- **TypeScript strict** for reliability.
+- **ESLint** for code quality.
+- **Consistent UI system** with Tailwind + shadcn/ui.
+- **Production-ready builds** via Vite.
+
+## 🚢 Deployment
+- Vercel or Netlify recommended.
+- Build: `npm run build` → outputs to `dist/`.
+- Configure env vars in your hosting dashboard.
+
+### Vercel quick start
 ```bash
-# Create feature branch
-git checkout -b feature/your-feature-name
-
-# Make changes and commit
-git add .
-git commit -m "feat: add your feature description"
-
-# Push and create pull request
-git push origin feature/your-feature-name
-```
-
-#### 3. Code Review Process
-- All changes require pull request review
-- Code must pass linting and type checking
-- Tests must pass (when implemented)
-- Documentation updates required for new features
-
-### Contributing Guidelines
-
-1. **Fork the repository** and create a feature branch
-2. **Follow coding standards** and use TypeScript strictly
-3. **Write clear commit messages** using conventional format
-4. **Add tests** for new functionality (when test framework is implemented)
-5. **Update documentation** for any new features or changes
-6. **Submit pull request** with detailed description of changes
-
-## Deployment
-
-### Production Deployment Options
-
-#### Vercel (Recommended)
-```bash
-# Install Vercel CLI
 npm i -g vercel
-
-# Deploy to Vercel
 vercel --prod
 ```
 
-**Configuration:**
-- Build Command: `npm run build`
-- Output Directory: `dist`
-- Environment Variables: Set in Vercel dashboard
-
-#### Netlify
+### Netlify quick start
 ```bash
-# Install Netlify CLI
 npm i -g netlify-cli
-
-# Deploy to Netlify
 netlify deploy --prod --dir=dist
 ```
 
-**Configuration:**
-- Build Command: `npm run build`
-- Publish Directory: `dist`
-- Environment Variables: Set in Netlify dashboard
-
-#### Manual Deployment
-```bash
-# Build for production
-npm run build
-
-# Upload dist/ folder to your web server
-# Configure web server for SPA routing
-```
-
 ### Environment Configuration
-
 #### Required Environment Variables
 ```env
 VITE_SUI_PACKAGE_ID=0x0  # Your deployed contract package ID
-VITE_NETWORK=mainnet     # Network: devnet, testnet, or mainnet
+VITE_NETWORK=devnet      # devnet | testnet | mainnet
 ```
 
 #### Optional Environment Variables
 ```env
-VITE_SUI_RPC_URL=https://fullnode.mainnet.sui.io:443
+VITE_SUI_RPC_URL=https://fullnode.devnet.sui.io:443
 VITE_APP_NAME=seti
 VITE_APP_VERSION=1.0.0
 ```
 
 ### Deployment Checklist
-
 - [ ] Environment variables configured
-- [ ] Build process tested locally
-- [ ] Domain and SSL certificate configured
-- [ ] CDN setup for static assets
-- [ ] Error monitoring and logging configured
-- [ ] Performance monitoring enabled
+- [ ] Build tested locally
+- [ ] Domain and SSL configured
+- [ ] CDN for static assets
+- [ ] Error and performance monitoring enabled
 
-## Security
+## 🗺️ Roadmap
+- Advanced market analytics and charts.
+- Portfolio dashboard and historical PnL.
+- Additional market types and conditional markets.
+- Governance and community discovery.
 
-### Security Measures
+## 👏 Acknowledgments
+- Sui Foundation and Mysten Labs
+- shadcn/ui, Radix UI, Tailwind CSS
+- React and Vite communities
 
-| Component | Security Implementation | Description |
-|-----------|------------------------|-------------|
-| **Wallet Security** | No private key storage | Private keys never stored in application |
-| **Smart Contracts** | Audited Sui Move contracts | Security-reviewed blockchain contracts |
-| **Input Validation** | Client and server validation | All user inputs validated and sanitized |
-| **Error Handling** | Comprehensive error management | Prevents crashes and information leakage |
-| **HTTPS** | SSL/TLS encryption | Secure communication in production |
-| **Access Control** | Wallet-based authentication | Secure user authentication system |
+## 👥 The Team
 
-### Best Practices
+| Name | Role | Contact |
+| ---- | ---- | ------- |
+| Mary Njoroge | Frontend Developer | marrianapeters00@gmail.com |
+| Graham | Full‑stack Engineer | jokumu25@gmail.com |
+| John Mokaya | Frontend Developer | mokayaj857@gmail.com |
+| Peter Njuguna | Smart Contract Developer | stanleykariuki@example.com |
 
-- **Never store sensitive data** in localStorage or sessionStorage
-- **Validate all inputs** on both client and server side
-- **Use HTTPS** for all production deployments
-- **Regular security audits** of smart contracts
-- **Monitor for vulnerabilities** in dependencies
+> Want edits? Share final names/roles/emails and I’ll update the table.
 
-## Browser Compatibility
+## 📸 Feature Snapshots
 
-| Browser | Minimum Version | Status |
-|---------|----------------|---------|
-| **Chrome** | 90+ | ✅ Fully Supported |
-| **Firefox** | 88+ | ✅ Fully Supported |
-| **Safari** | 14+ | ✅ Fully Supported |
-| **Edge** | 90+ | ✅ Fully Supported |
-| **Mobile Safari** | 14+ | ✅ Fully Supported |
-| **Chrome Mobile** | 90+ | ✅ Fully Supported |
+> Replace these placeholders with real screenshots by adding files under `public/` (e.g., `public/screenshots/`) and updating the image paths below.
 
-## Support & Documentation
+### Marketplace Overview
+<img width="1517" height="946" alt="Marketplace Overview" src="https://github.com/user-attachments/assets/19d8afe7-5b94-43da-83e8-050d4fad7642" />
 
-### Getting Help
+### Market Setup
+<img width="826" height="880" alt="Market Setup" src="https://github.com/user-attachments/assets/2d26f94f-c169-4e80-af24-b51dc38e490b" />
 
-- **Documentation**: Comprehensive guides and API documentation
-- **GitHub Issues**: Report bugs and request features
-- **Community Discord**: Join our developer community
-- **Email Support**: Contact support@seti.app
-- **Knowledge Base**: Search our documentation portal
+### Trading YES/NO
+<img width="1517" height="946" alt="Trading YES/NO" src="https://github.com/user-attachments/assets/04def0fe-73c3-4c44-912c-8e0946e4381b" />
 
-### Troubleshooting
+### Dashboard
+<img width="1701" height="956" alt="Dashboard" src="https://github.com/user-attachments/assets/1671f66e-7010-4bce-b8ff-914bb8414d07" />
 
-#### Common Issues
+### Trading Activity
+<img width="1701" height="956" alt="Trading Activity" src="https://github.com/user-attachments/assets/2462c984-7e30-4913-9b23-9409b6a77ae3" />
 
-**Wallet Connection Problems**
-- Verify Sui wallet extension is installed and updated
-- Check network configuration (devnet/testnet/mainnet)
-- Clear browser cache and refresh the page
-- Ensure wallet is unlocked and authorized
+## 📈 Milestones
 
-**Transaction Failures**
-- Verify sufficient SUI balance for gas fees
-- Check market status (active/resolved)
-- Ensure wallet has adequate balance
-- Review transaction details before confirmation
+### MVP Release
+- Core market creation and trading on Sui
+- Wallet integration and responsive UI
 
-**Market Creation Issues**
-- Validate all required fields are completed
-- Ensure end time is set in the future
-- Verify sufficient SUI for initial liquidity
-- Check image URL is accessible and valid
+![MVP Release](./public/og-image.svg)
 
-## License
+### Liquidity & Analytics Enhancements
+- Add liquidity flow and 24h volume metrics
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+![Liquidity & Analytics](./public/placeholder.svg)
 
-## Acknowledgments
+### Next: Portfolio & Advanced Markets
+- Portfolio dashboard, conditional markets, and governance discovery
 
-We extend our gratitude to the following organizations and communities:
+![Roadmap Preview](./public/placeholder.svg)
 
-- **Sui Foundation** for providing the innovative blockchain platform
-- **shadcn/ui** for the exceptional UI component library
-- **Radix UI** for accessible and robust component primitives
-- **Tailwind CSS** for the utility-first CSS framework
-- **React Team** for the outstanding frontend framework
-- **Vite Team** for the fast and efficient build tool
-- **TypeScript Team** for the powerful type system
-
-## Roadmap
-
-### Current Phase (v1.0)
-- ✅ Core market creation and trading functionality
-- ✅ Sui wallet integration and management
-- ✅ Responsive design and mobile optimization
-- ✅ Market browsing and category filtering
-- ✅ Real-time price updates and analytics
-
-### Next Phase (v1.1)
-- 🔄 Advanced trading features and order types
-- 🔄 Comprehensive portfolio management dashboard
-- 🔄 Enhanced market analytics and insights
-- 🔄 Social features and community interactions
-- 🔄 Advanced market creation tools
-
-### Future Phases (v2.0+)
-- 📋 Mobile application (React Native)
-- 📋 Advanced market types and derivatives
-- 📋 Governance and voting mechanisms
-- 📋 API for third-party integrations
-- 📋 Cross-chain compatibility
-- 📋 Institutional trading features
+## 📄 License
+MIT — see `LICENSE` for details.
 
 ---
 
-<div align="center">
-  <p><strong>Built with ❤️ for the Sui ecosystem</strong></p>
-  <p><em>seti - Where the future meets prediction markets</em></p>
-</div>
+## 🧰 Development Reference
+
+### Technology Matrix
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| Frontend | React + TypeScript | UI and state management |
+| Build | Vite | Dev server and builds |
+| Styling | Tailwind CSS | Utility-first CSS |
+| UI | shadcn/ui + Radix UI | Accessible components |
+| Blockchain | Sui + @mysten/dapp-kit | Wallet + chain interactions |
+| Data | React Query | Server-state caching |
+
+### Development Scripts
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Start Vite dev server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+
+### Code Quality Standards
+- TypeScript strict mode
+- ESLint with React + TS rules
+- Conventional commits
+
+### Contributing Guidelines
+1. Fork the repo and create a feature branch.
+2. Follow coding standards and TypeScript usage.
+3. Write clear commit messages.
+4. Update documentation when adding features.
+5. Open a PR with details of changes.
+
+## 🔒 Security
+
+### Measures
+| Component | Practice |
+|-----------|----------|
+| Wallet Security | Never store private keys |
+| Smart Contracts | Audited Move modules (when applicable) |
+| Validation | Client-side validation for inputs |
+| HTTPS | Use TLS in production |
+| Access Control | Wallet-based auth |
+
+### Best Practices
+- Don’t store sensitive data in local/session storage.
+- Validate inputs on client and server.
+- Regularly audit dependencies and contracts.
+
+## 🌐 Browser Compatibility
+| Browser | Minimum Version | Status |
+|---------|-----------------|--------|
+| Chrome | 90+ | ✅ Supported |
+| Firefox | 88+ | ✅ Supported |
+| Safari | 14+ | ✅ Supported |
+| Edge | 90+ | ✅ Supported |
+
+## ❓ Support & Troubleshooting
+- Open GitHub Issues for bugs and feature requests.
+- Ensure wallet is installed, updated, connected to the correct Sui network.
+- Verify SUI balance for gas; review market status before trading.

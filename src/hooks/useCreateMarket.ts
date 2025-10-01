@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSignAndExecuteTransaction, useSuiClient, useCurrentAccount } from '@mysten/dapp-kit';
 import type { SuiTransactionBlockResponse, SuiObjectResponse, SuiObjectChange, SuiObjectChangeCreated } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
-import { SUI_TYPE_ARG } from '@mysten/sui/utils';
+// removed unused SUI_TYPE_ARG import
 import { CreateMarketParams, UseCreateMarketResult, PACKAGE_ID, MODULE } from '@/types/contract';
 
 /**
@@ -138,7 +138,7 @@ export function useCreateMarket(): UseCreateMarketResult {
 function extractMarketIdFromResult(result: SuiTransactionBlockResponse): string | null {
   try {
     // Look for created objects (top-level or under effects)
-    const objectChanges: SuiObjectChange[] | undefined = (result as SuiTransactionBlockResponse)?.objectChanges || (result as SuiTransactionBlockResponse)?.effects?.objectChanges as unknown as SuiObjectChange[] | undefined;
+    const objectChanges: SuiObjectChange[] | undefined = result.objectChanges;
     if (Array.isArray(objectChanges)) {
       for (const change of objectChanges) {
         if (change?.type !== 'created') continue;
@@ -166,9 +166,9 @@ function extractMarketIdFromResult(result: SuiTransactionBlockResponse): string 
     if (Array.isArray(events)) {
       for (const event of events) {
         if (typeof event?.type === 'string' && event.type.endsWith('::polymarket::MarketCreated')) {
-          const parsedEvent = event.parsedJson;
-          if (parsedEvent && typeof parsedEvent.market_id === 'string') {
-            return parsedEvent.market_id as string;
+          const pj = event.parsedJson as { market_id?: unknown } | undefined;
+          if (pj && typeof pj.market_id === 'string') {
+            return pj.market_id;
           }
         }
       }
