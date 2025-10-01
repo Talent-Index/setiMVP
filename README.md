@@ -18,6 +18,12 @@
 
 seti is a sophisticated prediction market platform that enables users to create, trade, and participate in prediction markets for real-world events. Built on the Sui blockchain, it provides a secure, transparent, and efficient environment for market participants to express their views on future outcomes.
 
+## 🚀 Live Demo
+
+Experience seti in action: **[https://seti-mvp.vercel.app/](https://seti-mvp.vercel.app/)**
+
+The live demo showcases all core features including market browsing, trading, and wallet integration on the Sui blockchain.
+
 ## Core Features
 
 ### Marketplace Platform
