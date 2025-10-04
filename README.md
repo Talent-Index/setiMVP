@@ -199,6 +199,7 @@ VITE_APP_VERSION=1.0.0
 | Graham | Full-stack Engineer | graham@gmail.com |
 | John Mokaya | Frontend Developer | mokayaj857@gmail.com |
 | Peter Njuguna | Smart Contract Developer | peternjuguna@gmail.com |
+| Iano | Smart Contract Developer | inc3099@gmail.com |
 
 ## 📄 License
 
