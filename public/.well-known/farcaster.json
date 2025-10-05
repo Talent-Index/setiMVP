@@ -1,0 +1,18 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjEzMzI3ODEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwNzdmODQ0MWE1NDdBMzhGNEIxZTk1OTZGNkZjRmYxQjcxM2Y0RjA1In0",
+    "payload": "eyJkb21haW4iOiJzZXRpbXZwLnZlcmNlbC5hcHAifQ",
+    "signature": "MHg0MjQzMWNkZjhiMDM5MmU0YmE5YTQ3ZWNiYWZhMWEyNWFjNGRlYjlkMTA2YmYwMDU2MDlmYzdlMDhiMmJkZmJhNjY1YjY1NTFjZDFjZDEwNGYwY2MwMTU0ZGMxNTJiOGQ3MTgzMmRjYThhMmI3ZjRhMWY5MmQ3OTgzMmM4MTBkNTFj"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Seti Predictions",
+    "iconUrl": "https://setimvp.vercel.app/seti-200.jpg",
+    "homeUrl": "https://setimvp.vercel.app",
+    "imageUrl": "https://setimvp.vercel.app/seti-200.jpg",
+    "buttonTitle": "Check this out",
+    "splashImageUrl": "https://setimvp.vercel.app/seti-splash.jpg",
+    "splashBackgroundColor": "#eeccff",
+    "webhookUrl": "https://setimvp.vercel.app/api/webhook"
+  }
+}
